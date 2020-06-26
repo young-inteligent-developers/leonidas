@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3770460410285249460}
   m_Layer: 5
-  m_Name: Field strength 1
+  m_Name: Field strength
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,8 +204,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 26
-  m_fontSizeBase: 26
+  m_fontSize: 34
+  m_fontSizeBase: 34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

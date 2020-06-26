@@ -11,15 +11,21 @@ public class Field : MonoBehaviour
 
     public GameObject strengthText;
 
+    FieldManager manager;
     SpriteRenderer border;
     SpriteRenderer fill;
-    Transform canvas;
+
+    public void HandleClick()
+    {
+        // to do something
+        Debug.Log("Now is your turn =)");
+    }
     
     void Start()
     {
+        manager = transform.parent.GetComponent<FieldManager>();
         border = transform.Find("Border").GetComponent<SpriteRenderer>();
         fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
-        canvas = GameObject.Find("Canvas").transform;
 
         Color[] c = { Color.white, Color.white };
         switch (ownership)
@@ -40,17 +46,11 @@ public class Field : MonoBehaviour
         fill.color = c[0];
 
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        GameObject strengthUi = Instantiate(strengthText, canvas);
+        GameObject strengthUi = Instantiate(strengthText, manager.canvas);
         strengthUi.GetComponent<RectTransform>().position = pos;
         Image background = strengthUi.transform.GetChild(0).GetComponent<Image>();
-        background.color = c[1];
+        background.color = c[0];
         Transform text = strengthUi.transform.GetChild(1);
         text.GetComponent<TextMeshProUGUI>().text = strength.ToString();
-    }
-
-    
-    void Update()
-    {
-        
     }
 }
