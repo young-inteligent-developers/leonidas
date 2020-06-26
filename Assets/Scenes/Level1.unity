@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strength: 5
   ownership: 0
-  strengthText: {fileID: 5791284346191968411, guid: 93ed77959a27dde4bb9c1995e9835d53,
+  strengthText: {fileID: 3770460410285249461, guid: 9bb5c61dee789fe45a8ab95a0e45b500,
     type: 3}
 --- !u!1 &434297923
 GameObject:
@@ -690,7 +690,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strength: 2
   ownership: 1
-  strengthText: {fileID: 5791284346191968411, guid: 93ed77959a27dde4bb9c1995e9835d53,
+  strengthText: {fileID: 3770460410285249461, guid: 9bb5c61dee789fe45a8ab95a0e45b500,
     type: 3}
 --- !u!1 &1481746244
 GameObject:
