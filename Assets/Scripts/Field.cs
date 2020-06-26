@@ -1,21 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using TMPro;
 
 
 public class Field : MonoBehaviour
 {
     public enum Ownership { Player, Neutral, Enemy }
 
+    public int strength;
     public Ownership ownership;
+
+    public GameObject strengthText;
 
     SpriteRenderer border;
     SpriteRenderer fill;
+    Transform canvas;
     
     void Start()
     {
         border = transform.Find("Border").GetComponent<SpriteRenderer>();
         fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
+        canvas = GameObject.Find("Canvas").transform;
 
         Color c = Color.white;
         switch (ownership)
@@ -31,6 +35,11 @@ public class Field : MonoBehaviour
                 break;
         }
         fill.color = c;
+
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+        GameObject text = Instantiate(strengthText, canvas);
+        text.GetComponent<RectTransform>().position = pos;
+        text.GetComponent<TextMeshProUGUI>().text = strength.ToString();
     }
 
     
