@@ -15,10 +15,9 @@ public class Field : MonoBehaviour
     SpriteRenderer border;
     SpriteRenderer fill;
 
-    public void HandleClick()
+    public void OnClick()
     {
-        // to do something
-        Debug.Log("Now is your turn =)");
+        manager.attackPanel.Open(strength);
     }
     
     void Start()

@@ -13,7 +13,7 @@ public class InputManager : MonoBehaviour
 
             if (hit.transform.tag == "Field")
             {
-                hit.transform.GetComponent<Field>().HandleClick();
+                hit.transform.GetComponent<Field>().OnClick();
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS
@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
 
             if (hit.transform.tag == "Field")
             {
-                hit.transform.GetComponent<Field>().HandleClick();
+                hit.transform.GetComponent<Field>().OnClick();
             }
         }
 #endif
