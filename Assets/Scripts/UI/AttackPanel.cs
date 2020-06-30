@@ -10,6 +10,7 @@ public class AttackPanel : MonoBehaviour
     public void Open(int strength)
     {
         strengthText.text = "1";
+        strengthSlider.value = 1;
         strengthSlider.maxValue = strength;
 
         gameObject.SetActive(true);
