@@ -6,6 +6,7 @@ public class Field : MonoBehaviour
 {
     public enum Ownership { Player, Neutral, Enemy }
 
+    public int index;
     public int strength;
     public Ownership ownership;
 
