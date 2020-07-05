@@ -2,6 +2,10 @@
 
 public class InputManager : MonoBehaviour
 {
+    public FieldManager fieldManager;
+
+    int inputPhase = 1;
+
     void Update()
     {
 #if UNITY_EDITOR
@@ -13,7 +17,19 @@ public class InputManager : MonoBehaviour
 
             if (hit.transform.tag == "Field")
             {
-                hit.transform.GetComponent<Field>().OnClick();
+                Field f = hit.transform.GetComponent<Field>();
+                if (inputPhase == 1)
+                {
+                    inputPhase++;
+                    fieldManager.HighlightConnectedFields(f.index);
+                }
+                else if (inputPhase == 2)
+                {
+                    if (!f.highlighted) return;
+
+                    inputPhase++;
+                    f.OnClick();
+                }
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS

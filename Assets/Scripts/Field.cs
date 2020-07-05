@@ -6,26 +6,42 @@ public class Field : MonoBehaviour
 {
     public enum Ownership { Player, Neutral, Enemy }
 
+    [HideInInspector]
+    public bool highlighted;
     public int index;
     public int strength;
     public Ownership ownership;
 
-    public GameObject strengthText;
+    public GameObject strengthText;  
 
     FieldManager manager;
     SpriteRenderer border;
     SpriteRenderer fill;
+    SpriteRenderer highlight;
 
     public void OnClick()
     {
         manager.attackPanel.Open(strength);
     }
-    
+
+    public void Highlight()
+    {
+        highlighted = true;
+        highlight.gameObject.SetActive(true);
+    }
+
+    public void Unhighlight()
+    {
+        highlighted = false;
+        highlight.gameObject.SetActive(false);
+    }
+
     void Start()
     {
         manager = transform.parent.GetComponent<FieldManager>();
         border = transform.Find("Border").GetComponent<SpriteRenderer>();
         fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
+        highlight = transform.Find("Highlight").GetComponent<SpriteRenderer>();
 
         Color[] c = { Color.white, Color.white };
         switch (ownership)
