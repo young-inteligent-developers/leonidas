@@ -15,6 +15,7 @@ public class Field : MonoBehaviour
     public GameObject strengthText;  
 
     FieldManager manager;
+    Animator animator;
     SpriteRenderer border;
     SpriteRenderer fill;
     SpriteRenderer highlight;
@@ -26,19 +27,26 @@ public class Field : MonoBehaviour
 
     public void Highlight()
     {
-        highlighted = true;
-        highlight.gameObject.SetActive(true);
+        bool b = true;
+
+        highlighted = b;
+        animator.SetBool("highlight", b);
+        highlight.gameObject.SetActive(b);
     }
 
     public void Unhighlight()
     {
-        highlighted = false;
-        highlight.gameObject.SetActive(false);
+        bool b = false;
+
+        highlighted = b;
+        animator.SetBool("highlight", b);
+        highlight.gameObject.SetActive(b);
     }
 
     void Start()
     {
         manager = transform.parent.GetComponent<FieldManager>();
+        animator = GetComponent<Animator>();
         border = transform.Find("Border").GetComponent<SpriteRenderer>();
         fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
         highlight = transform.Find("Highlight").GetComponent<SpriteRenderer>();

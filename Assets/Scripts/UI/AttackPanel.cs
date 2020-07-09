@@ -4,6 +4,8 @@ using TMPro;
 
 public class AttackPanel : MonoBehaviour
 {
+    public InputManager inputManager;
+    public FieldManager fieldManager;
     public TextMeshProUGUI strengthText;
     public Slider strengthSlider;
 
@@ -18,6 +20,8 @@ public class AttackPanel : MonoBehaviour
 
     public void Close()
     {
+        inputManager.ResetInput();
+        fieldManager.UnhighlightConnectedFields();
         gameObject.SetActive(false);
     }
 

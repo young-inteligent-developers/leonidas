@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class FieldManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class FieldManager : MonoBehaviour
     public Transform connections;
     public Transform canvas;
     public AttackPanel attackPanel;
+
+    List<Field> highlightedFields = new List<Field>();
 
     public Field GetField(int index)
     {
@@ -23,11 +26,30 @@ public class FieldManager : MonoBehaviour
     {
         foreach (Int2 fc in fieldConnections)
         {
+            Field f = null;
+
             if (fc.first == index)
-                GetField(fc.second).Highlight();
+            {
+                f = GetField(fc.second);
+                f.Highlight();
+            }
             else if (fc.second == index)
-                GetField(fc.first).Highlight();
+            {
+                f = GetField(fc.first);
+                f.Highlight();
+            }
+
+            if (f != null) 
+                highlightedFields.Add(f);
         }
+    }
+
+    public void UnhighlightConnectedFields()
+    {
+        foreach (Field f in highlightedFields)
+            f.Unhighlight();
+        
+        highlightedFields.Clear();
     }
 
     void Start()
