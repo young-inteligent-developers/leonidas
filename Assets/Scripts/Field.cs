@@ -31,23 +31,13 @@ public class Field : MonoBehaviour
 
     public void Highlight()
     {
-        /*bool b = true;
-
-        highlighted = b;
-        animator.SetBool("highlight", b);
-        selectRing.gameObject.SetActive(b);*/
-
+        highlighted = true;
         animColor.Animate(0.4f, colors[1]);
     }
 
     public void Unhighlight()
     {
-        /*bool b = false;
-
-        highlighted = b;
-        animator.SetBool("highlight", b);
-        selectRing.gameObject.SetActive(b); */
-
+        highlighted = false;
         animColor.Animate(0.4f, Color.white);
     }
 

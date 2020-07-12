@@ -31,8 +31,13 @@ public class AnimColor : MonoBehaviour
             enabled = false;
             return;
         }
-
+        
         sr.color = Color.Lerp(cc, dc, time / duration);
         time += Time.deltaTime;
+    }
+
+    float easeInQuart(float n)
+    {
+        return n * n * n * n;
     }
 }

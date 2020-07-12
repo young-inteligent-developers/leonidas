@@ -16,7 +16,7 @@ public class FieldManager : MonoBehaviour
 
     public Field GetField(int index)
     {
-        if (index <= transform.childCount - 1)
+        if (index > 0 && index <= transform.childCount - 1)
             return transform.GetChild(index - 1).GetComponent<Field>();
 
         return null;
@@ -29,18 +29,15 @@ public class FieldManager : MonoBehaviour
             Field f = null;
 
             if (fc.first == index)
-            {
                 f = GetField(fc.second);
-                f.Highlight();
-            }
             else if (fc.second == index)
-            {
                 f = GetField(fc.first);
-                f.Highlight();
-            }
 
-            if (f != null) 
+            if (f != null)
+            {
+                f.Highlight();
                 highlightedFields.Add(f);
+            }
         }
     }
 

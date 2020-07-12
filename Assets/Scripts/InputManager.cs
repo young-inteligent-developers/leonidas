@@ -3,6 +3,7 @@
 public class InputManager : MonoBehaviour
 {
     public FieldManager fieldManager;
+    public AttackPanel attackPanel;
 
     int inputPhase = 1;
 
@@ -29,13 +30,14 @@ public class InputManager : MonoBehaviour
                     inputPhase++;
                     f.OnSelect();
                     fieldManager.HighlightConnectedFields(f.index);
+                    attackPanel.Set(f.strength);
                 }
                 else if (inputPhase == 2)
                 {
                     if (!f.highlighted) return;
-
+                    
                     inputPhase++;
-                    //f.OnClick();
+                    attackPanel.Open();
                 }
             }
         }
@@ -53,18 +55,19 @@ public class InputManager : MonoBehaviour
             {
                 Field f = hit.transform.GetComponent<Field>();
 
-                if (inputPhase == 1)
+                if (inputPhase == 1 && f.ownership == Field.Ownership.Player)
                 {
                     inputPhase++;
                     f.OnSelect();
-                    //fieldManager.HighlightConnectedFields(f.index);
+                    fieldManager.HighlightConnectedFields(f.index);
+                    attackPanel.Set(f.strength);
                 }
                 else if (inputPhase == 2)
                 {
                     if (!f.highlighted) return;
-
+                    
                     inputPhase++;
-                    //f.OnClick();
+                    attackPanel.Open();
                 }
             }
         }
