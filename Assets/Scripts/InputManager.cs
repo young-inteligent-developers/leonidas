@@ -23,9 +23,11 @@ public class InputManager : MonoBehaviour
             if (hit.transform.tag == "Field")
             {
                 Field f = hit.transform.GetComponent<Field>();
-                if (inputPhase == 1)
+
+                if (inputPhase == 1 && f.ownership == Field.Ownership.Player)
                 {
                     inputPhase++;
+                    f.OnSelect();
                     fieldManager.HighlightConnectedFields(f.index);
                 }
                 else if (inputPhase == 2)
@@ -33,7 +35,7 @@ public class InputManager : MonoBehaviour
                     if (!f.highlighted) return;
 
                     inputPhase++;
-                    f.OnClick();
+                    //f.OnClick();
                 }
             }
         }
@@ -50,17 +52,19 @@ public class InputManager : MonoBehaviour
             if (hit.transform.tag == "Field")
             {
                 Field f = hit.transform.GetComponent<Field>();
+
                 if (inputPhase == 1)
                 {
                     inputPhase++;
-                    fieldManager.HighlightConnectedFields(f.index);
+                    f.OnSelect();
+                    //fieldManager.HighlightConnectedFields(f.index);
                 }
                 else if (inputPhase == 2)
                 {
                     if (!f.highlighted) return;
 
                     inputPhase++;
-                    f.OnClick();
+                    //f.OnClick();
                 }
             }
         }
