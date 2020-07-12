@@ -7,9 +7,11 @@ public class InputManager : MonoBehaviour
 
     int inputPhase = 1;
 
-    public void ResetInput()
+    public void CancelSelection()
     {
         inputPhase = 1;
+        fieldManager.selectedField.OnDeselect();
+        fieldManager.UnhighlightConnectedFields();
     }
 
     void Update()
@@ -19,7 +21,11 @@ public class InputManager : MonoBehaviour
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
-            if (!hit) return;
+            if (!hit)
+            {
+                if (inputPhase == 2) CancelSelection();
+                return;
+            }
 
             if (hit.transform.tag == "Field")
             {
@@ -49,7 +55,11 @@ public class InputManager : MonoBehaviour
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(t.position);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
-            if (!hit) return;
+            if (!hit)
+            {
+                if (inputPhase == 2) CancelSelection();
+                return;
+            }
 
             if (hit.transform.tag == "Field")
             {

@@ -25,8 +25,16 @@ public class Field : MonoBehaviour
 
     public void OnSelect()
     {
+        manager.selectedField = this;
+
         animator.SetTrigger("clicked");
         StartCoroutine(WaitForAnimColor(0.25f));
+    }
+
+    public void OnDeselect()
+    {
+        manager.selectedField = null;
+        animColor.Animate(0.3f, Color.white);
     }
 
     public void Highlight()
@@ -38,7 +46,7 @@ public class Field : MonoBehaviour
     public void Unhighlight()
     {
         highlighted = false;
-        animColor.Animate(0.4f, Color.white);
+        animColor.Animate(0.3f, Color.white);
     }
 
     void Start()

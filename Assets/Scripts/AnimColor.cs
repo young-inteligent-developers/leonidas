@@ -2,8 +2,8 @@
 
 public class AnimColor : MonoBehaviour
 {
-    private float duration = 1;
-    private float time = 0;
+    private float duration  = 1;
+    private float time      = 0;
 
     private SpriteRenderer sr;      // sprite renderer
     private Color cc;               // current color
@@ -14,6 +14,7 @@ public class AnimColor : MonoBehaviour
         this.duration = duration;
         cc = sr.color;
         dc = destinationColor;
+        time = 0;
 
         enabled = true;
     }

@@ -18,8 +18,7 @@ public class AttackPanel : MonoBehaviour
 
     public void Close()
     {
-        inputManager.ResetInput();
-        fieldManager.UnhighlightConnectedFields();
+        inputManager.CancelSelection();
         gameObject.SetActive(false);
     }
 

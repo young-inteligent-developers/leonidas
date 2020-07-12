@@ -12,6 +12,8 @@ public class FieldManager : MonoBehaviour
     public Transform canvas;
     public AttackPanel attackPanel;
 
+    [HideInInspector]
+    public Field selectedField;
     List<Field> highlightedFields = new List<Field>();
 
     public Field GetField(int index)
