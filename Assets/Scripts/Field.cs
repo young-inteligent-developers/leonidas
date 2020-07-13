@@ -12,18 +12,32 @@ public class Field : MonoBehaviour
     public int index;
     public int strength;
     public Ownership ownership;
-
-    public GameObject strengthText;  
-
+    
     FieldManager manager;
-    AnimColor animColor;
+    AnimColor fillAC;               // field fill color animation
+    AnimColor borderAC;             // field border color animation
     Animator animator;
-    SpriteRenderer border;
     SpriteRenderer fill;
+    SpriteRenderer border;
     SpriteRenderer selectRing;
-    Color[] colors = new Color[2];
+    TextMeshProUGUI strengthText;
+    Color[] colors = new Color[2];  // field fill [0] and border [1] colors
 
-    public void OnSelect()
+    public void Attack(int s)
+    {
+        if (strength - s < 0) return;
+
+        Field f = manager.actionField;
+        f.SetStrength(Mathf.Abs(f.strength - s));
+        if (s > f.strength) f.SetOwnership(ownership);
+    }
+
+    public void Defense(int s)
+    {
+        //SetStrength(Mathf.Abs(strength - s));
+    }
+
+    public void Select()
     {
         manager.selectedField = this;
 
@@ -31,35 +45,73 @@ public class Field : MonoBehaviour
         StartCoroutine(WaitForAnimColor(0.25f));
     }
 
-    public void OnDeselect()
+    public void Deselect()
     {
         manager.selectedField = null;
-        animColor.Animate(0.3f, Color.white);
+        borderAC.Animate(0.3f, Color.white);
     }
 
     public void Highlight()
     {
         highlighted = true;
-        animColor.Animate(0.4f, colors[1]);
+        borderAC.Animate(0.4f, colors[1]);
     }
 
     public void Unhighlight()
     {
         highlighted = false;
-        animColor.Animate(0.3f, Color.white);
+        borderAC.Animate(0.3f, Color.white);
+    }
+
+    public void SetStrength(int s)
+    {
+        if (s == strength) return;
+
+        strength = s;
+        strengthText.text = s.ToString();
+    }
+
+    public void SetOwnership(Ownership os)
+    {
+        if (os == ownership) return;
+
+        ownership = os;
+        SetColors(os);
+        fillAC.Animate(0.3f, colors[0]);
     }
 
     void Start()
     {
-        manager = transform.parent.GetComponent<FieldManager>();
-        animColor = GetComponent<AnimColor>();
-        animator = GetComponent<Animator>();
-        border = transform.Find("Border").GetComponent<SpriteRenderer>();
-        fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
-        selectRing = transform.Find("Select ring").GetComponent<SpriteRenderer>();
+        // // // // // // // Private components assignment  // // // // // // //
 
+        manager = transform.parent.GetComponent<FieldManager>();
+        animator = GetComponent<Animator>();
+        fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
+        border = transform.Find("Border").GetComponent<SpriteRenderer>();
+        selectRing = transform.Find("Select ring").GetComponent<SpriteRenderer>();
+        fillAC = fill.GetComponent<AnimColor>();
+        borderAC = border.GetComponent<AnimColor>();
+
+
+        // // // // // // // Field color assignment according its ownership // // // // // // //
+        
+        SetColors(ownership);
+        fill.color = colors[0];
+
+
+        // // // // // // // Field UI creation  // // // // // // //
+
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+        GameObject strengthUi = Instantiate(manager.strengthTextPrefab, manager.canvas);
+        strengthUi.GetComponent<RectTransform>().position = pos;
+        strengthText = strengthUi.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        strengthText.text = strength.ToString();
+    }
+
+    void SetColors(Ownership os)
+    {
         Color[] c = { Color.white, Color.white };
-        switch (ownership)
+        switch (os)
         {
             case Ownership.Player:
                 c[0] = new Color(0.254f, 0.823f, 0.976f);
@@ -74,19 +126,13 @@ public class Field : MonoBehaviour
                 c[1] = new Color(0.976f, 0.450f, 0.450f);
                 break;
         }
-        colors[0] = fill.color = c[0];
-        colors[1] = c[1];
 
-        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        GameObject strengthUi = Instantiate(strengthText, manager.canvas);
-        strengthUi.GetComponent<RectTransform>().position = pos;
-        Transform text = strengthUi.transform.GetChild(0);
-        text.GetComponent<TextMeshProUGUI>().text = strength.ToString();
+        colors = c;
     }
 
     IEnumerator WaitForAnimColor(float s)
     {
         yield return new WaitForSeconds(s);
-        animColor.Animate(0.3f, new Color(0.952f, 0.797f, 0.301f));
+        borderAC.Animate(0.3f, new Color(0.952f, 0.797f, 0.301f));
     }
 }

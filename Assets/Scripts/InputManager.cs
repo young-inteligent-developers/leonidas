@@ -10,7 +10,7 @@ public class InputManager : MonoBehaviour
     public void CancelSelection()
     {
         inputPhase = 1;
-        fieldManager.selectedField.OnDeselect();
+        fieldManager.selectedField.Deselect();
         fieldManager.UnhighlightConnectedFields();
     }
 
@@ -34,7 +34,7 @@ public class InputManager : MonoBehaviour
                 if (inputPhase == 1 && f.ownership == Field.Ownership.Player)
                 {
                     inputPhase++;
-                    f.OnSelect();
+                    f.Select();
                     fieldManager.HighlightConnectedFields(f.index);
                     attackPanel.Set(f.strength);
                 }
@@ -43,6 +43,7 @@ public class InputManager : MonoBehaviour
                     if (!f.highlighted) return;
                     
                     inputPhase++;
+                    fieldManager.actionField = f;
                     attackPanel.Open();
                 }
             }
@@ -68,7 +69,7 @@ public class InputManager : MonoBehaviour
                 if (inputPhase == 1 && f.ownership == Field.Ownership.Player)
                 {
                     inputPhase++;
-                    f.OnSelect();
+                    f.Select();
                     fieldManager.HighlightConnectedFields(f.index);
                     attackPanel.Set(f.strength);
                 }

@@ -7,6 +7,7 @@ public class FieldManager : MonoBehaviour
 
     [Space(16)]
 
+    public GameObject strengthTextPrefab;
     public GameObject connectionPrefab;
     public Transform connections;
     public Transform canvas;
@@ -14,6 +15,8 @@ public class FieldManager : MonoBehaviour
 
     [HideInInspector]
     public Field selectedField;
+    [HideInInspector]
+    public Field actionField;
     List<Field> highlightedFields = new List<Field>();
 
     public Field GetField(int index)

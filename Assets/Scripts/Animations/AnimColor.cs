@@ -21,7 +21,7 @@ public class AnimColor : MonoBehaviour
 
     private void Start()
     {
-        sr = transform.Find("Border").GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
         enabled = false;
     }
 
