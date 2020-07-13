@@ -54,7 +54,7 @@ public class InputManager : MonoBehaviour
         Touch t = Input.GetTouch(0);
         if (t.phase == TouchPhase.Ended)
         {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(t.position);
+            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
             if (!hit)
             {
@@ -78,6 +78,7 @@ public class InputManager : MonoBehaviour
                     if (!f.highlighted) return;
                     
                     inputPhase++;
+                    fieldManager.actionField = f;
                     attackPanel.Open();
                 }
             }

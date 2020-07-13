@@ -28,8 +28,9 @@ public class Field : MonoBehaviour
         if (strength - s < 0) return;
 
         Field f = manager.actionField;
-        f.SetStrength(Mathf.Abs(f.strength - s));
         if (s > f.strength) f.SetOwnership(ownership);
+        f.SetStrength(Mathf.Abs(f.strength - s));
+        SetStrength(strength - s);
     }
 
     public void Defense(int s)
