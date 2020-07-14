@@ -11,7 +11,6 @@ public class FieldManager : MonoBehaviour
     public GameObject connectionPrefab;
     public Transform connections;
     public Transform canvas;
-    public AttackPanel attackPanel;
 
     [HideInInspector]
     public Field selectedField;

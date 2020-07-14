@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 
-public class AttackPanel : MonoBehaviour
+public class ActionPanel : MonoBehaviour
 {
     public InputManager inputManager;
     public FieldManager fieldManager;
@@ -40,6 +40,12 @@ public class AttackPanel : MonoBehaviour
     public void OnAttack()
     {
         fieldManager.selectedField.Attack(strength);
+        Close();
+    }
+
+    public void OnRegroup()
+    {
+        fieldManager.selectedField.Regroup(strength);
         Close();
     }
 }

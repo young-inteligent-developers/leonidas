@@ -3,7 +3,8 @@
 public class InputManager : MonoBehaviour
 {
     public FieldManager fieldManager;
-    public AttackPanel attackPanel;
+    public ActionPanel attackPanel;
+    public ActionPanel defensePanel;
 
     int inputPhase = 1;
 
@@ -36,7 +37,6 @@ public class InputManager : MonoBehaviour
                     inputPhase++;
                     f.Select();
                     fieldManager.HighlightConnectedFields(f.index);
-                    attackPanel.Set(f.strength);
                 }
                 else if (inputPhase == 2)
                 {
@@ -44,7 +44,14 @@ public class InputManager : MonoBehaviour
                     
                     inputPhase++;
                     fieldManager.actionField = f;
-                    attackPanel.Open();
+
+                    ActionPanel ap;
+                    if (fieldManager.actionField.ownership == fieldManager.selectedField.ownership)
+                        ap = defensePanel;
+                    else
+                        ap = attackPanel;
+                    ap.Set(fieldManager.selectedField.strength);
+                    ap.Open();
                 }
             }
         }

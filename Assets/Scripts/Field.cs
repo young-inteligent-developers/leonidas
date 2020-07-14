@@ -33,9 +33,13 @@ public class Field : MonoBehaviour
         SetStrength(strength - s);
     }
 
-    public void Defense(int s)
+    public void Regroup(int s)
     {
-        //SetStrength(Mathf.Abs(strength - s));
+        if (strength - s < 0) return;
+
+        Field f = manager.actionField;
+        f.SetStrength(f.strength + s);
+        SetStrength(strength - s);
     }
 
     public void Select()
