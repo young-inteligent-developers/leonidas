@@ -1,46 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkillTree : MonoBehaviour
 {
-    public bool unlocked;
-    public int cost;
-    public GameObject before;
-    public GameObject after;
+    public string points;
+    public GameObject SkillPoint;
 
-    SpriteRenderer skill;
-    SpriteRenderer skillAfter;
-    SpriteRenderer skillBefore;
+    public GameObject attack;
+    public GameObject defence;
 
-    Color[] c = { Color.red, Color.gray, Color.green };
     void Start()
     {
-        skill = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        skillBefore = before.transform.GetChild(0).GetComponent<SpriteRenderer>();
-        skillAfter = after.transform.GetChild(0).GetComponent<SpriteRenderer>();
+        SkillPoint.GetComponent<Text>().text = points;
     }
 
-    void Update()
+    public void DefenceActive()
     {
-        // if skillAfter == null
+        defence.SetActive(true);
+        attack.SetActive(false);
 
-        //else
+        SkillPoint.GetComponent<Transform>().position = new Vector2(240, 400);
+    }
 
-        if (skillBefore.color == c[0])
-        {
-            skill.color = c[0];
-        }
-        else if (skillBefore.color == c[1])
-        {
-            skill.color = c[0];
-        }
-        else if (skillBefore.color == c[2])
-        {
-            if (unlocked == true)
-                skill.color = c[2];
-            else
-                skill.color = c[1];
-        }
+    public void AttackActive()
+    {
+        defence.SetActive(false);
+        attack.SetActive(true);
+
+        SkillPoint.GetComponent<Transform>().position = new Vector2(90, 450);
     }
 }
