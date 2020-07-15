@@ -32,21 +32,24 @@ public class SkillTree : MonoBehaviour
         //SkillPoint.GetComponent<RectTransform>().position = new Vector2(110, 450);
     }
 
-    public void Unlocked(GameObject skill)
+    public void Unlock(GameObject skill)
     {
-        if (skill.GetComponent<Skill>().CanUnlocked == true && skill.GetComponent<Skill>().Unlocked == false)
+        if (skill.GetComponent<Skill>().canUnlock == true && skill.GetComponent<Skill>().unlocked == false)
         {
-            // Unlocked this skill
-            skill.GetComponent<Skill>().Unlocked = true;
-
-            // Can unlocked next
-            GameObject afterSkill = skill.GetComponent<Skill>().afterSkill;
-            afterSkill.GetComponent<Skill>().CanUnlocked = true;
-
-            // Minus x points
             int p = int.Parse(points);
-            p -= skill.GetComponent<Skill>().Cost;
-            points = p.ToString();
+            int c = skill.GetComponent<Skill>().cost;
+            if (p >= c) {
+                // Unlocked this skill
+                skill.GetComponent<Skill>().unlocked = true;
+
+                // Can unlocked next
+                GameObject afterSkill = skill.GetComponent<Skill>().afterSkill;
+                afterSkill.GetComponent<Skill>().canUnlock = true;
+
+                // Minus x points
+                p -= c;
+                points = p.ToString();
+            }
         }
     }
 }

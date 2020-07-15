@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public class Skill : MonoBehaviour
     {
-        public bool Unlocked;
-        public bool CanUnlocked;
+        public bool unlocked;
+        public bool canUnlock;
         //public bool Defence;
         //public bool Attack;
-        public string Name;
-        public int Cost;
+        //public string name;
+        public int cost;
         public GameObject afterSkill;
 
         Color[] c = { Color.red, Color.gray, Color.green };
 
         void Start()
         {
-            if (Unlocked == false) 
+            if (unlocked == false) 
             {
                 this.GetComponent<Image>().color = c[0];
             }
@@ -25,12 +25,12 @@ public class Skill : MonoBehaviour
 
         void Update()
         {
-            if (CanUnlocked == true)
+            if (canUnlock == true)
             {
                 this.GetComponent<Image>().color = c[1];
             }
 
-            if (Unlocked == true)
+            if (unlocked == true)
             {
                 this.GetComponent<Image>().color = c[2];
             }
