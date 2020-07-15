@@ -31,19 +31,19 @@ public class ActionPanel : MonoBehaviour
         strengthSlider.maxValue = strength;
     }
 
-    public void OnStrengthSliderChange()
+    public void ChangeStrengthSlider()
     {
         strength = (int) strengthSlider.value;
         strengthText.text = strength.ToString();
     }
 
-    public void OnAttack()
+    public void Attack()
     {
         fieldManager.selectedField.Attack(strength);
         Close();
     }
 
-    public void OnRegroup()
+    public void Regroup()
     {
         fieldManager.selectedField.Regroup(strength);
         Close();

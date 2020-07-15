@@ -16,6 +16,7 @@ public class FieldManager : MonoBehaviour
     public Field selectedField;
     [HideInInspector]
     public Field actionField;
+    List<Field> fields = new List<Field>();
     List<Field> highlightedFields = new List<Field>();
 
     public Field GetField(int index)
@@ -53,8 +54,25 @@ public class FieldManager : MonoBehaviour
         highlightedFields.Clear();
     }
 
+    public void IncreaseUnits(Field.Ownership os, int v)
+    {
+        foreach (Field f in fields)
+            if (f.ownership == os)
+                f.SetStrength(f.strength + v);
+    }
+
+    public void DecreaseUnits(Field.Ownership os, int v)
+    {
+        foreach (Field f in fields)
+            if (f.ownership == os)
+                f.SetStrength(f.strength - v);
+    }
+
     void Start()
     {
+        for (int i = 0; i < transform.childCount - 1; i++)
+            fields.Add(transform.GetChild(i).GetComponent<Field>());
+
         foreach (Int2 fc in fieldConnections)
         {
             LineRenderer l = Instantiate(connectionPrefab, connections).GetComponent<LineRenderer>();
