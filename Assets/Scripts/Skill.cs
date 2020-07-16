@@ -7,13 +7,12 @@ public class Skill : MonoBehaviour
     {
         public bool unlocked;
         public bool canUnlock;
-        //public bool Defence;
-        //public bool Attack;
-        //public string name;
-        public int cost;
-        public GameObject afterSkill;
 
-        Color[] c = { Color.red, Color.gray, Color.green };
+        public string name;
+        public int cost;
+        public Skill nextSkill;
+
+        Color[] c = { Color.red, Color.gray, Color.green};
 
         void Start()
         {
@@ -21,9 +20,11 @@ public class Skill : MonoBehaviour
             {
                 this.GetComponent<Image>().color = c[0];
             }
+
+            RefreshSkill();
         }
 
-        void Update()
+        public void RefreshSkill()
         {
             if (canUnlock == true)
             {
@@ -34,8 +35,5 @@ public class Skill : MonoBehaviour
             {
                 this.GetComponent<Image>().color = c[2];
             }
-
-            
         }
     }
-
