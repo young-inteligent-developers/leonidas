@@ -11,6 +11,7 @@ public class Field : MonoBehaviour
     public bool highlighted;
     public int index;
     public int strength;
+    public int defense;
     public Ownership ownership;
     
     FieldManager manager;
@@ -20,7 +21,7 @@ public class Field : MonoBehaviour
     SpriteRenderer fill;
     SpriteRenderer border;
     SpriteRenderer selectRing;
-    TextMeshProUGUI strengthText;
+    FieldUI fieldUI;
     Color[] colors = new Color[2];  // field fill [0] and border [1] colors
 
     public void Attack(int s)
@@ -46,7 +47,8 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = this;
 
-        animator.SetTrigger("clicked");
+        animator.SetTrigger("selected");
+        fieldUI.GetComponent<Animator>().SetTrigger("selected");
         StartCoroutine(WaitForAnimColor(0.25f));
     }
 
@@ -54,6 +56,7 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = null;
         borderAC.Animate(0.3f, Color.white);
+        fieldUI.GetComponent<Animator>().SetTrigger("deselected");
     }
 
     public void Highlight()
@@ -68,12 +71,17 @@ public class Field : MonoBehaviour
         borderAC.Animate(0.3f, Color.white);
     }
 
+    public void ShowInfo()
+    {
+
+    }
+
     public void SetStrength(int s)
     {
         if (s == strength) return;
 
         strength = s;
-        strengthText.text = s.ToString();
+        fieldUI.unitText.text = s.ToString();
     }
 
     public void SetOwnership(Ownership os)
@@ -107,10 +115,11 @@ public class Field : MonoBehaviour
         // // // // // // // Field UI creation  // // // // // // //
 
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        GameObject strengthUi = Instantiate(manager.strengthTextPrefab, manager.canvas);
-        strengthUi.GetComponent<RectTransform>().position = pos;
-        strengthText = strengthUi.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        strengthText.text = strength.ToString();
+        fieldUI = Instantiate(manager.strengthTextPrefab, manager.canvas).GetComponent<FieldUI>();
+        fieldUI.GetComponent<RectTransform>().position = pos;
+        fieldUI.unitText.text = strength.ToString();
+        fieldUI.defenseText.text = defense.ToString();
+        fieldUI.defenseBackground.color = colors[1];
     }
 
     void SetColors(Ownership os)

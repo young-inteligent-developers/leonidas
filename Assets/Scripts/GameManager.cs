@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    
     [HideInInspector]
     public bool isPlayerTurn    = true;
     [HideInInspector]
@@ -13,11 +13,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Objects")]
     public FieldManager fieldManager;
+    public TextMeshProUGUI turnText;
 
     public void EndTurn()
     {
         isPlayerTurn = !isPlayerTurn;
-        turn++;
+        SetTurn(turn + 1);
 
         if (isPlayerTurn)
         {
@@ -27,5 +28,11 @@ public class GameManager : MonoBehaviour
         {
             fieldManager.IncreaseUnits(Field.Ownership.Enemy, recruitmentBonus);
         }
+    }
+
+    public void SetTurn(int v)
+    {
+        turn = v;
+        turnText.text = v.ToString();
     }
 }
