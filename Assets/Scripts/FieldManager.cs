@@ -16,6 +16,8 @@ public class FieldManager : MonoBehaviour
     public Field selectedField;
     [HideInInspector]
     public Field actionField;
+    [HideInInspector]
+    public Field infoField;
     List<Field> fields = new List<Field>();
     List<Field> highlightedFields = new List<Field>();
 

@@ -47,8 +47,7 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = this;
 
-        animator.SetTrigger("selected");
-        fieldUI.GetComponent<Animator>().SetTrigger("selected");
+        animator.SetTrigger("selected"); 
         StartCoroutine(WaitForAnimColor(0.25f));
     }
 
@@ -56,7 +55,6 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = null;
         borderAC.Animate(0.3f, Color.white);
-        fieldUI.GetComponent<Animator>().SetTrigger("deselected");
     }
 
     public void Highlight()
@@ -73,7 +71,14 @@ public class Field : MonoBehaviour
 
     public void ShowInfo()
     {
+        manager.infoField = this;
+        fieldUI.DefenseIn();
+    }
 
+    public void HideInfo()
+    {
+        manager.infoField = null;
+        fieldUI.DefenseOut();
     }
 
     public void SetStrength(int s)
@@ -119,7 +124,7 @@ public class Field : MonoBehaviour
         fieldUI.GetComponent<RectTransform>().position = pos;
         fieldUI.unitText.text = strength.ToString();
         fieldUI.defenseText.text = defense.ToString();
-        fieldUI.defenseBackground.color = colors[1];
+        //fieldUI.defenseBackground.color = colors[0];
     }
 
     void SetColors(Ownership os)

@@ -6,7 +6,7 @@ public class InputManager : MonoBehaviour
     public ActionPanel attackPanel;
     public ActionPanel defensePanel;
 
-    int inputPhase = 1;
+    int inputPhase                      = 1;
 
     public void CancelSelection()
     {
@@ -18,85 +18,59 @@ public class InputManager : MonoBehaviour
     void Update()
     {
 #if UNITY_EDITOR
-        if (Input.GetMouseButtonUp(0))
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
-            if (!hit)
-            {
-                if (inputPhase == 2) CancelSelection();
-                return;
-            }
-
-            if (hit.transform.tag == "Field")
-            {
-                Field f = hit.transform.GetComponent<Field>();
-
-                if (inputPhase == 1 && f.ownership == Field.Ownership.Player)
-                {
-                    inputPhase++;
-                    f.Select();
-                    fieldManager.HighlightConnectedFields(f.index);
-                }
-                else if (inputPhase == 2)
-                {
-                    if (!f.highlighted) return;
-                    
-                    inputPhase++;
-                    fieldManager.actionField = f;
-
-                    ActionPanel ap;
-                    if (fieldManager.actionField.ownership == fieldManager.selectedField.ownership)
-                        ap = defensePanel;
-                    else
-                        ap = attackPanel;
-                    ap.Set(fieldManager.selectedField.strength);
-                    ap.Open();
-                }
-            }
-        }
+        if (!Input.GetMouseButtonUp(0)) return;
+        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 #elif UNITY_ANDROID || UNITY_IOS
-        if (Input.touchCount == 0) return;
+        if (Input.touchCount == 0 || Input.GetTouch(0).phase != TouchPhase.Ended) 
+            return;
+        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+#endif
 
-        Touch t = Input.GetTouch(0);
-        if (t.phase == TouchPhase.Ended)
+        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
+        if (!hit)
         {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
-            if (!hit)
-            {
-                if (inputPhase == 2) CancelSelection();
-                return;
-            }
+            if (inputPhase == 2) 
+                CancelSelection();
+            if (fieldManager.infoField != null) 
+                fieldManager.infoField.HideInfo();
 
-            if (hit.transform.tag == "Field")
-            {
-                Field f = hit.transform.GetComponent<Field>();
+            return;
+        }
 
-                if (inputPhase == 1 && f.ownership == Field.Ownership.Player)
+        if (hit.transform.tag == "Field")
+        {
+            Field f = hit.transform.GetComponent<Field>();
+
+            if (inputPhase == 1)
+            {
+                if (f.ownership == Field.Ownership.Player)
                 {
                     inputPhase++;
                     f.Select();
                     fieldManager.HighlightConnectedFields(f.index);
                 }
-                else if (inputPhase == 2)
-                {
-                    if (!f.highlighted) return;
-                    
-                    inputPhase++;
-                    fieldManager.actionField = f;
 
-                    ActionPanel ap;
-                    if (fieldManager.actionField.ownership == fieldManager.selectedField.ownership)
-                        ap = defensePanel;
-                    else
-                        ap = attackPanel;
-                    ap.Set(fieldManager.selectedField.strength);
-                    ap.Open();
-                }
+                if (fieldManager.infoField != null && fieldManager.infoField != f)
+                    fieldManager.infoField.HideInfo();
+
+                f.ShowInfo();
+            }
+            else if (inputPhase == 2)
+            {
+                if (!f.highlighted) return;
+                    
+                inputPhase++;
+                fieldManager.infoField.HideInfo();
+                fieldManager.actionField = f;
+
+                ActionPanel ap;
+                if (fieldManager.actionField.ownership == fieldManager.selectedField.ownership)
+                    ap = defensePanel;
+                else
+                    ap = attackPanel;
+                ap.Set(fieldManager.selectedField.strength);
+                ap.Open();
             }
         }
-#endif
     }
-
 }
