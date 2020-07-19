@@ -13,8 +13,11 @@ public class FieldUI : MonoBehaviour
     public const float D_T_DEL      = 0.2f;     // defense text delay
     */
 
+    [Header("Animation curves")]
     public AnimationCurve defenseInAC;
     public AnimationCurve defenseOutAC;
+
+    [Header("Field UI properties")]
     public TextMeshProUGUI unitText;
     public TextMeshProUGUI defenseText;
     public GameObject defenseBonus;
@@ -31,7 +34,7 @@ public class FieldUI : MonoBehaviour
         LeanTween.value(defenseText.gameObject, (float v, float r) => {
             Color c = defenseText.color; c.a = v;
             defenseText.color = c;
-        }, 0, 1, 0.15f)
+        }, defenseText.color.a, 1, 0.15f)
             .setDelay(0.25f)
             .setEase(LeanTweenType.easeInCubic);
     }
@@ -46,7 +49,7 @@ public class FieldUI : MonoBehaviour
         LeanTween.value(defenseText.gameObject, (float v, float r) => {
             Color c = defenseText.color; c.a = v;
             defenseText.color = c;
-        }, 1, 0, 0.15f)
+        }, defenseText.color.a, 0, 0.15f)
             .setDelay(0.05f)
             .setEase(LeanTweenType.easeInCubic);
     }

@@ -20,11 +20,22 @@ public class FieldManager : MonoBehaviour
     public Field infoField;
     List<Field> fields = new List<Field>();
     List<Field> highlightedFields = new List<Field>();
+    List<FieldConnection> fConnections = new List<FieldConnection>();
+    List<FieldConnection> highlightedConnections = new List<FieldConnection>();
 
     public Field GetField(int index)
     {
         if (index > 0 && index <= transform.childCount - 1)
             return transform.GetChild(index - 1).GetComponent<Field>();
+
+        return null;
+    }
+
+    public FieldConnection GetFieldConnection(int index)
+    {
+        foreach (FieldConnection fc in fConnections)
+            if (fc.connection.first == index || fc.connection.second == index)
+                return fc;
 
         return null;
     }
@@ -44,16 +55,21 @@ public class FieldManager : MonoBehaviour
             {
                 f.Highlight();
                 highlightedFields.Add(f);
+
+                FieldConnection fCon = GetFieldConnection(index);
+                highlightedConnections.Add(fCon);
+                fCon.Highlight();
             }
         }
     }
 
     public void UnhighlightConnectedFields()
     {
-        foreach (Field f in highlightedFields)
-            f.Unhighlight();
-        
+        foreach (Field f in highlightedFields) f.Unhighlight();
         highlightedFields.Clear();
+
+        foreach (FieldConnection fc in highlightedConnections) fc.Unhighlight();
+        highlightedConnections.Clear();
     }
 
     public void IncreaseUnits(Field.Ownership os, int v)
@@ -77,7 +93,11 @@ public class FieldManager : MonoBehaviour
 
         foreach (Int2 fc in fieldConnections)
         {
-            LineRenderer l = Instantiate(connectionPrefab, connections).GetComponent<LineRenderer>();
+            FieldConnection fCon = Instantiate(connectionPrefab, connections).GetComponent<FieldConnection>();
+            fCon.connection = fc;
+            fConnections.Add(fCon);
+
+            LineRenderer l = fCon.GetComponent<LineRenderer>();
             Vector3 f = GetField(fc.first).transform.position; f.z = 1;
             Vector3 s = GetField(fc.second).transform.position; s.z = 1;
             float d = Vector2.Distance(f, s);

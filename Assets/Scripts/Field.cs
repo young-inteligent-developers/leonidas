@@ -9,15 +9,14 @@ public class Field : MonoBehaviour
 
     [HideInInspector]
     public bool highlighted;
+
+    [Header("Field properties")]
     public int index;
     public int strength;
     public int defense;
     public Ownership ownership;
     
     FieldManager manager;
-    AnimColor fillAC;               // field fill color animation
-    AnimColor borderAC;             // field border color animation
-    Animator animator;
     SpriteRenderer fill;
     SpriteRenderer border;
     SpriteRenderer selectRing;
@@ -47,26 +46,34 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = this;
 
-        animator.SetTrigger("selected"); 
-        StartCoroutine(WaitForAnimColor(0.25f));
+        selectRing.transform.localScale = Vector3.one * 0.95f;
+        LeanTween.scale(selectRing.gameObject, Vector3.one * 1.5f, 0.25f);
+        LeanTween.alpha(selectRing.gameObject, 1, 0.07f);
+        LeanTween.alpha(selectRing.gameObject, 0, 0.07f)
+            .setDelay(0.18f);
+        LeanTween.color(border.gameObject, new Color(0.952f, 0.797f, 0.301f), 0.15f)
+            .setDelay(0.1f)
+            .setEase(LeanTweenType.easeInSine);
     }
 
     public void Deselect()
     {
         manager.selectedField = null;
-        borderAC.Animate(0.3f, Color.white);
+        LeanTween.color(border.gameObject, Color.white, 0.33f);
     }
 
     public void Highlight()
     {
         highlighted = true;
-        borderAC.Animate(0.4f, colors[1]);
+        LeanTween.color(border.gameObject, colors[1], 0.2f)
+            .setEase(LeanTweenType.easeInSine);
     }
 
     public void Unhighlight()
     {
         highlighted = false;
-        borderAC.Animate(0.3f, Color.white);
+        LeanTween.color(border.gameObject, Color.white, 0.2f)
+            .setEase(LeanTweenType.easeOutSine);
     }
 
     public void ShowInfo()
@@ -95,7 +102,8 @@ public class Field : MonoBehaviour
 
         ownership = os;
         SetColors(os);
-        fillAC.Animate(0.3f, colors[0]);
+        LeanTween.color(fill.gameObject, colors[0], 0.3f)
+            .setEase(LeanTweenType.easeInSine);
     }
 
     void Start()
@@ -103,12 +111,9 @@ public class Field : MonoBehaviour
         // // // // // // // Private components assignment  // // // // // // //
 
         manager = transform.parent.GetComponent<FieldManager>();
-        animator = GetComponent<Animator>();
         fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
         border = transform.Find("Border").GetComponent<SpriteRenderer>();
         selectRing = transform.Find("Select ring").GetComponent<SpriteRenderer>();
-        fillAC = fill.GetComponent<AnimColor>();
-        borderAC = border.GetComponent<AnimColor>();
 
 
         // // // // // // // Field color assignment according its ownership // // // // // // //
@@ -124,7 +129,6 @@ public class Field : MonoBehaviour
         fieldUI.GetComponent<RectTransform>().position = pos;
         fieldUI.unitText.text = strength.ToString();
         fieldUI.defenseText.text = defense.ToString();
-        //fieldUI.defenseBackground.color = colors[0];
     }
 
     void SetColors(Ownership os)
@@ -147,11 +151,5 @@ public class Field : MonoBehaviour
         }
 
         colors = c;
-    }
-
-    IEnumerator WaitForAnimColor(float s)
-    {
-        yield return new WaitForSeconds(s);
-        borderAC.Animate(0.3f, new Color(0.952f, 0.797f, 0.301f));
     }
 }
