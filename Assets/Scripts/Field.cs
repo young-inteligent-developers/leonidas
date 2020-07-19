@@ -45,6 +45,7 @@ public class Field : MonoBehaviour
     public void Select()
     {
         manager.selectedField = this;
+        ShowInfo();
 
         selectRing.transform.localScale = Vector3.one * 0.95f;
         LeanTween.scale(selectRing.gameObject, Vector3.one * 1.5f, 0.25f);
@@ -59,11 +60,13 @@ public class Field : MonoBehaviour
     public void Deselect()
     {
         manager.selectedField = null;
+        HideInfo();
         LeanTween.color(border.gameObject, Color.white, 0.33f);
     }
 
     public void Highlight()
     {
+        manager.highlightedFields.Add(this);
         highlighted = true;
         LeanTween.color(border.gameObject, colors[1], 0.2f)
             .setEase(LeanTweenType.easeInSine);
@@ -125,7 +128,7 @@ public class Field : MonoBehaviour
         // // // // // // // Field UI creation  // // // // // // //
 
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        fieldUI = Instantiate(manager.strengthTextPrefab, manager.canvas).GetComponent<FieldUI>();
+        fieldUI = Instantiate(manager.strengthTextPrefab, manager.fieldUI).GetComponent<FieldUI>();
         fieldUI.GetComponent<RectTransform>().position = pos;
         fieldUI.unitText.text = strength.ToString();
         fieldUI.defenseText.text = defense.ToString();

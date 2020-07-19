@@ -10,7 +10,7 @@ public class FieldManager : MonoBehaviour
     public GameObject strengthTextPrefab;
     public GameObject connectionPrefab;
     public Transform connections;
-    public Transform canvas;
+    public Transform fieldUI;
 
     [HideInInspector]
     public Field selectedField;
@@ -19,9 +19,11 @@ public class FieldManager : MonoBehaviour
     [HideInInspector]
     public Field infoField;
     List<Field> fields = new List<Field>();
-    List<Field> highlightedFields = new List<Field>();
+    [HideInInspector]
+    public List<Field> highlightedFields = new List<Field>();
     List<FieldConnection> fConnections = new List<FieldConnection>();
-    List<FieldConnection> highlightedConnections = new List<FieldConnection>();
+    [HideInInspector]
+    public List<FieldConnection> highlightedConnections = new List<FieldConnection>();
 
     public Field GetField(int index)
     {
@@ -31,11 +33,11 @@ public class FieldManager : MonoBehaviour
         return null;
     }
 
-    public FieldConnection GetFieldConnection(int index)
+    public List<FieldConnection> HighlightFieldConnections(int index)
     {
         foreach (FieldConnection fc in fConnections)
             if (fc.connection.first == index || fc.connection.second == index)
-                return fc;
+                fc.Highlight();
 
         return null;
     }
@@ -52,15 +54,10 @@ public class FieldManager : MonoBehaviour
                 f = GetField(fc.first);
 
             if (f != null)
-            {
                 f.Highlight();
-                highlightedFields.Add(f);
-
-                FieldConnection fCon = GetFieldConnection(index);
-                highlightedConnections.Add(fCon);
-                fCon.Highlight();
-            }
         }
+
+        HighlightFieldConnections(index);
     }
 
     public void UnhighlightConnectedFields()
