@@ -13,13 +13,13 @@ public class FieldConnection : MonoBehaviour
         lr = GetComponent<LineRenderer>();
     }
 
-    public void Highlight()
+    public void Highlight(Color toColor)
     {
         manager.highlightedConnections.Add(this);
 
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
-        }, Color.white, new Color(1, 0.929f, 0.705f), 0.3f)
+        }, Color.white, toColor, 0.3f)
             .setEase(LeanTweenType.easeInSine);
     }
 
@@ -27,7 +27,7 @@ public class FieldConnection : MonoBehaviour
     {
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
-        }, new Color(1, 0.929f, 0.705f), Color.white, 0.3f)
+        }, lr.startColor, Color.white, 0.3f)
             .setEase(LeanTweenType.easeOutSine);
     }
 }

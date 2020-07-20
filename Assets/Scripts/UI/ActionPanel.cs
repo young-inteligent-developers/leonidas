@@ -13,16 +13,18 @@ public class ActionPanel : MonoBehaviour
 
     public void Open()
     {
-        strength = 1;
+        inputManager.enabled = false;
 
+        strength = 1;
         strengthText.text = strength.ToString();
         strengthSlider.value = strength;
         gameObject.SetActive(true);
     }
 
-    public void Close()
+    public void Close(bool cancelSelection)
     {
-        inputManager.CancelSelection();
+        inputManager.enabled = true;
+        if (cancelSelection) inputManager.CancelSelection();
         gameObject.SetActive(false);
     }
 
@@ -40,12 +42,12 @@ public class ActionPanel : MonoBehaviour
     public void Attack()
     {
         fieldManager.selectedField.Attack(strength);
-        Close();
+        Close(true);
     }
 
     public void Regroup()
     {
         fieldManager.selectedField.Regroup(strength);
-        Close();
+        Close(true);
     }
 }

@@ -36,8 +36,18 @@ public class FieldManager : MonoBehaviour
     public List<FieldConnection> HighlightFieldConnections(int index)
     {
         foreach (FieldConnection fc in fConnections)
-            if (fc.connection.first == index || fc.connection.second == index)
-                fc.Highlight();
+        {
+            Field.Ownership os;
+            if (fc.connection.first == index)
+                os = GetField(fc.connection.second).ownership;
+            else if (fc.connection.second == index)
+                os = GetField(fc.connection.first).ownership;
+            else
+                continue;
+
+            Color c = os == Field.Ownership.Player ? new Color(0.655f, 0.948f, 1) : new Color(1, 0.636f, 0.636f);
+            fc.Highlight(c);
+        }
 
         return null;
     }

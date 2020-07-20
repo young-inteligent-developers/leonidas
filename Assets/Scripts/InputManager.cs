@@ -66,8 +66,7 @@ public class InputManager : MonoBehaviour
                     return;
                 }
                     
-                inputPhase++;
-                //fieldManager.infoField.HideInfo();
+                //inputPhase++;
                 fieldManager.actionField = f;
 
                 ActionPanel ap;
