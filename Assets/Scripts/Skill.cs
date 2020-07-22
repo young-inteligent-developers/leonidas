@@ -4,36 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Skill : MonoBehaviour
+{
+    public int id;
+
+    public bool unlocked;
+    public bool canUnlock;
+
+    public string skillName;
+    public string description;
+    public int cost;
+    public Skill nextSkill;
+
+    Color[] c = { Color.red, Color.gray, Color.green};
+
+    void Start()
     {
-        public bool unlocked;
-        public bool canUnlock;
-
-        public string name;
-        public int cost;
-        public Skill nextSkill;
-
-        Color[] c = { Color.red, Color.gray, Color.green};
-
-        void Start()
+        if (unlocked == false) 
         {
-            if (unlocked == false) 
-            {
-                this.GetComponent<Image>().color = c[0];
-            }
-
-            RefreshSkill();
+            this.GetComponent<Image>().color = c[0];
         }
 
-        public void RefreshSkill()
-        {
-            if (canUnlock == true)
-            {
-                this.GetComponent<Image>().color = c[1];
-            }
+        RefreshSkill();
+    }
 
-            if (unlocked == true)
-            {
-                this.GetComponent<Image>().color = c[2];
-            }
+    public void RefreshSkill()
+    {
+        if (canUnlock == true)
+        {
+            this.GetComponent<Image>().color = c[1];
+        }
+
+        if (unlocked == true)
+        {
+            this.GetComponent<Image>().color = c[2];
         }
     }
+}

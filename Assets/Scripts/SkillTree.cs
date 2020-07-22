@@ -14,9 +14,11 @@ public class SkillTree : MonoBehaviour
 
     public GameObject infoSkillPanel;
     public TextMeshProUGUI infoSkillPanelName;
+    public TextMeshProUGUI infoSkillPanelDescription;
     public TextMeshProUGUI infoSkillPanelCost;
 
     private Skill skill;
+    private SkillConnection sc;
 
     void Start()
     {
@@ -29,8 +31,6 @@ public class SkillTree : MonoBehaviour
         attack.SetActive(false);
 
         CloseInfoSkillPanel();
-
-        //SkillPoint.GetComponent<RectTransform>().position = new Vector2(180, 300);
     }
 
     public void ActivateAttack()
@@ -39,8 +39,6 @@ public class SkillTree : MonoBehaviour
         attack.SetActive(true);
 
         CloseInfoSkillPanel();
-
-        //SkillPoint.GetComponent<RectTransform>().position = new Vector2(110, 450);
     }
 
     public void InfoSkillPanel(Skill s)
@@ -48,7 +46,8 @@ public class SkillTree : MonoBehaviour
         skill = s;
         infoSkillPanel.SetActive(true);
 
-        infoSkillPanelName.text = s.name;
+        infoSkillPanelName.text = s.skillName;
+        infoSkillPanelDescription.text = s.description;
         infoSkillPanelCost.text = s.cost.ToString();
 
         Image info = infoSkillPanel.transform.GetChild(4).GetComponent<Image>();
@@ -93,6 +92,8 @@ public class SkillTree : MonoBehaviour
                 // Color change
                 s.RefreshSkill();
                 s.nextSkill.RefreshSkill();
+
+                //defence.GetComponent<SkillConnection>().LineColor(s);
             }
         }
     }
@@ -104,6 +105,6 @@ public class SkillTree : MonoBehaviour
     public void UnlockInfoSkillPanel()
     {
         Unlock();
-        infoSkillPanel.SetActive(false);
+        CloseInfoSkillPanel();
     }
 }
