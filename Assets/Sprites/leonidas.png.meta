@@ -17,6 +17,9 @@ TextureImporter:
   - first:
       213: -2885380452630851881
     second: leonidas_2
+  - first:
+      213: 5705384246525289652
+    second: leonidas_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -60,7 +63,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 220
+  spritePixelsToUnits: 250
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -130,9 +133,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 262
-        width: 250
-        height: 250
+        y: 264
+        width: 248
+        height: 248
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,8 +185,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7de051704c115f7d0800000000000000
-      internalID: -2885380452630851881
+      spriteID: 4b4ef396eb89d2f40800000000000000
+      internalID: 5705384246525289652
       vertices: []
       indices: 
       edges: []

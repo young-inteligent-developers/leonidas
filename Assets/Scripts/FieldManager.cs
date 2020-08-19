@@ -45,7 +45,7 @@ public class FieldManager : MonoBehaviour
             else
                 continue;
 
-            Color c = os == Field.Ownership.Player ? new Color(0.655f, 0.948f, 1) : new Color(1, 0.636f, 0.636f);
+            Color c = os == Field.Ownership.Player ? new Color(0.501f, 0.905f, 0.976f) : new Color(0.976f, 0.450f, 0.450f);
             fc.Highlight(c);
         }
 
@@ -109,8 +109,15 @@ public class FieldManager : MonoBehaviour
             Vector3 s = GetField(fc.second).transform.position; s.z = 1;
             float d = Vector2.Distance(f, s);
 
-            l.SetPosition(0, Vector3.Lerp(f, s, 1 / d * 0.52f));
-            l.SetPosition(1, Vector3.Lerp(s, f, 1 / d * 0.52f));
+            l.SetPosition(0, Vector3.Lerp(f, s, 1 / d * 0.45f));
+            l.SetPosition(1, Vector3.Lerp(s, f, 1 / d * 0.45f));
+
+            FieldConnectionInfo i = new FieldConnectionInfo();
+            i.fieldConnection = fCon;
+            i.SetAngle(f, s);
+            GetField(fc.first).fcInfos.Add(new FieldConnectionInfo(i));
+            i.SetAngle(s, f);
+            GetField(fc.second).fcInfos.Add(new FieldConnectionInfo(i));
         }
     }
 }

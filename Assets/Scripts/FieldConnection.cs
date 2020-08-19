@@ -6,11 +6,13 @@ public class FieldConnection : MonoBehaviour
 
     FieldManager manager;
     LineRenderer lr;
+    Color dColor;
 
     private void Start()
     {
         manager = transform.parent.parent.GetComponent<FieldManager>();
         lr = GetComponent<LineRenderer>();
+        dColor = lr.startColor;
     }
 
     public void Highlight(Color toColor)
@@ -19,7 +21,7 @@ public class FieldConnection : MonoBehaviour
 
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
-        }, Color.white, toColor, 0.3f)
+        }, dColor, toColor, 0.3f)
             .setEase(LeanTweenType.easeInSine);
     }
 
@@ -27,7 +29,7 @@ public class FieldConnection : MonoBehaviour
     {
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
-        }, lr.startColor, Color.white, 0.3f)
+        }, lr.startColor, dColor, 0.3f)
             .setEase(LeanTweenType.easeOutSine);
     }
 }

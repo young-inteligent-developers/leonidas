@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Field : MonoBehaviour
 {
@@ -9,6 +7,8 @@ public class Field : MonoBehaviour
 
     [HideInInspector]
     public bool highlighted;
+    [HideInInspector]
+    public List<FieldConnectionInfo> fcInfos = new List<FieldConnectionInfo>();
 
     [Header("Field properties")]
     public int index;
@@ -61,21 +61,21 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = null;
         HideInfo();
-        LeanTween.color(border.gameObject, Color.white, 0.33f);
+        LeanTween.color(border.gameObject, colors[1], 0.33f);
     }
 
     public void Highlight()
     {
         manager.highlightedFields.Add(this);
         highlighted = true;
-        LeanTween.color(border.gameObject, colors[1], 0.2f)
+        LeanTween.color(border.gameObject, new Color(0.9f, 0.9f, 0.9f), 0.2f)
             .setEase(LeanTweenType.easeInSine);
     }
 
     public void Unhighlight()
     {
         highlighted = false;
-        LeanTween.color(border.gameObject, Color.white, 0.2f)
+        LeanTween.color(border.gameObject, colors[1], 0.2f)
             .setEase(LeanTweenType.easeOutSine);
     }
 
@@ -123,6 +123,7 @@ public class Field : MonoBehaviour
         
         SetColors(ownership);
         fill.color = colors[0];
+        border.color = colors[1];
 
 
         // // // // // // // Field UI creation  // // // // // // //
@@ -140,7 +141,7 @@ public class Field : MonoBehaviour
         switch (os)
         {
             case Ownership.Player:
-                c[0] = new Color(0.254f, 0.823f, 0.976f);
+                c[0] = new Color(0.154f, 0.768f, 0.934f);
                 c[1] = new Color(0.501f, 0.905f, 0.976f);
                 break;
             case Ownership.Neutral:
@@ -148,7 +149,7 @@ public class Field : MonoBehaviour
                 c[1] = new Color(0.729f, 0.683f, 0.867f);
                 break;
             case Ownership.Enemy:
-                c[0] = new Color(0.968f, 0.262f, 0.262f);
+                c[0] = new Color(0.924f, 0.144f, 0.226f);
                 c[1] = new Color(0.976f, 0.450f, 0.450f);
                 break;
         }

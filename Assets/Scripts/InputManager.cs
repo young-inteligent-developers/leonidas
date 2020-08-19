@@ -18,7 +18,7 @@ public class InputManager : MonoBehaviour
     void Update()
     {
 #if UNITY_EDITOR
-        if (!Input.GetMouseButtonUp(0)) return;
+        if (!Input.GetMouseButton(0)) return;
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount == 0 || Input.GetTouch(0).phase != TouchPhase.Ended) 
@@ -26,7 +26,7 @@ public class InputManager : MonoBehaviour
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 #endif
 
-        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
+        /*RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
         if (!hit)
         {
             if (inputPhase == 2) 
@@ -76,6 +76,28 @@ public class InputManager : MonoBehaviour
                     ap = attackPanel;
                 ap.Set(fieldManager.selectedField.strength);
                 ap.Open();
+            }
+        }*/
+
+        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
+        if (fieldManager.selectedField == null && hit)
+        {
+            Field f = hit.transform.GetComponent<Field>();
+            if (f.ownership != Field.Ownership.Player)
+                return;
+
+            f.Select();
+        }
+        else if (fieldManager.selectedField != null)
+        {
+            Vector2 sp = fieldManager.selectedField.transform.position;
+            Vector2 d = pos - sp;
+            float angle = Math.RadToDeg360(Mathf.Atan2(d.y, d.x));
+
+            foreach (FieldConnectionInfo i in fieldManager.selectedField.fcInfos)
+            {
+                if (Mathf.Abs(Mathf.DeltaAngle(i.angle, angle)) <= 15)
+                    Debug.Log("haHAA!");
             }
         }
     }
