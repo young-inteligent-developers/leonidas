@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8772754977155111833}
   - component: {fileID: 4637863843581309253}
+  - component: {fileID: -668190119365700773}
   m_Layer: 0
   m_Name: Skill connection
   m_TagString: Untagged
@@ -133,3 +134,16 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &-668190119365700773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772754977155111834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 222f35c93b361384c95ab34b1a84bd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indexes: 

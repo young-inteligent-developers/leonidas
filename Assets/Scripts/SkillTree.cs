@@ -18,11 +18,53 @@ public class SkillTree : MonoBehaviour
     public TextMeshProUGUI infoSkillPanelCost;
 
     private Skill skill;
-    private SkillConnection sc;
+
+    public Int2[] skillConnections;
+
+    public GameObject element;
+    public GameObject connections;
 
     void Start()
     {
         SkillPoint.GetComponent<TextMeshProUGUI>().text = points.ToString();
+
+        RenderLines();
+    }
+
+    public Skill GetSkill(int id, Transform t)
+    {
+        if (id > 0 && id <= t.childCount - 1)
+            return t.GetChild(id - 1).GetComponent<Skill>();
+
+        return null;
+    }
+
+    void RenderLines()
+    {
+        Camera cam = Camera.main;
+
+        foreach (Int2 sc in skillConnections)
+        {
+            GameObject con = Instantiate(element, connections.transform);
+
+            LineRenderer line = con.GetComponent<LineRenderer>();
+
+            Vector3 f = cam.ScreenToWorldPoint(GetSkill(sc.first, defence.transform).GetComponent<RectTransform>().position); f.z = 1;
+            Vector3 s = cam.ScreenToWorldPoint(GetSkill(sc.second, defence.transform).GetComponent<RectTransform>().position); s.z = 1;
+
+            if (sc.first == 1)
+                Debug.Log(GetSkill(sc.first, defence.transform).GetComponent<RectTransform>().position);
+            
+            line.SetPosition(0, f);
+            line.SetPosition(1, s);
+
+            SkillConnection skillConn = con.GetComponent<SkillConnection>();
+            skillConn.indexes[0] = sc.first;  
+            skillConn.indexes[1] = sc.second;  
+        }
+
+        connections.transform.GetChild(0).GetComponent<LineRenderer>().startColor = Color.grey;
+        connections.transform.GetChild(1).GetComponent<LineRenderer>().startColor = Color.grey;
     }
 
     public void ActivateDefence()
@@ -92,8 +134,6 @@ public class SkillTree : MonoBehaviour
                 // Color change
                 s.RefreshSkill();
                 s.nextSkill.RefreshSkill();
-
-                //defence.GetComponent<SkillConnection>().LineColor(s);
             }
         }
     }
