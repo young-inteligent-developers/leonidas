@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
     public ActionPanel defensePanel;
 
     int inputPhase                      = 1;
+    FieldConnectionInfo currentInfo     = null;
 
     public void CancelSelection()
     {
@@ -15,10 +16,23 @@ public class InputManager : MonoBehaviour
         fieldManager.UnhighlightConnectedFields();
     }
 
+    public void CancelLineHighlight()
+    {
+        if (currentInfo != null)
+        {
+            currentInfo.fieldConnection.Unhighlight();
+            currentInfo = null;
+        }
+    }
+
     void Update()
     {
 #if UNITY_EDITOR
-        if (!Input.GetMouseButton(0)) return;
+        if (!Input.GetMouseButton(0))
+        {
+            CancelLineHighlight();
+            return;
+        }
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount == 0 || Input.GetTouch(0).phase != TouchPhase.Ended) 
@@ -87,18 +101,30 @@ public class InputManager : MonoBehaviour
                 return;
 
             f.Select();
+            fieldManager.HighlightFieldConnections(f.index);
         }
         else if (fieldManager.selectedField != null)
         {
             Vector2 sp = fieldManager.selectedField.transform.position;
             Vector2 d = pos - sp;
             float angle = Math.RadToDeg360(Mathf.Atan2(d.y, d.x));
+            bool inRange = false;
 
             foreach (FieldConnectionInfo i in fieldManager.selectedField.fcInfos)
             {
                 if (Mathf.Abs(Mathf.DeltaAngle(i.angle, angle)) <= 15)
-                    Debug.Log("haHAA!");
+                {
+                    inRange = true;
+                    if (i == currentInfo)
+                        break;
+
+                    CancelLineHighlight();
+                    i.fieldConnection.Highlight(Color.blue);
+                    currentInfo = i;
+                }
             }
+            if (!inRange)
+                CancelLineHighlight();
         }
     }
 }

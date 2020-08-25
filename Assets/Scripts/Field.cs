@@ -45,7 +45,7 @@ public class Field : MonoBehaviour
     public void Select()
     {
         manager.selectedField = this;
-        ShowInfo();
+        /*ShowInfo();
 
         selectRing.transform.localScale = Vector3.one * 0.95f;
         LeanTween.scale(selectRing.gameObject, Vector3.one * 1.5f, 0.25f);
@@ -54,7 +54,7 @@ public class Field : MonoBehaviour
             .setDelay(0.18f);
         LeanTween.color(border.gameObject, new Color(0.952f, 0.797f, 0.301f), 0.15f)
             .setDelay(0.1f)
-            .setEase(LeanTweenType.easeInSine);
+            .setEase(LeanTweenType.easeInSine);*/
     }
 
     public void Deselect()

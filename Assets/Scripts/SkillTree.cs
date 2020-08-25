@@ -52,15 +52,12 @@ public class SkillTree : MonoBehaviour
             Vector3 f = cam.ScreenToWorldPoint(GetSkill(sc.first, defence.transform).GetComponent<RectTransform>().position); f.z = 1;
             Vector3 s = cam.ScreenToWorldPoint(GetSkill(sc.second, defence.transform).GetComponent<RectTransform>().position); s.z = 1;
 
-            if (sc.first == 1)
-                Debug.Log(GetSkill(sc.first, defence.transform).GetComponent<RectTransform>().position);
-            
             line.SetPosition(0, f);
             line.SetPosition(1, s);
 
             SkillConnection skillConn = con.GetComponent<SkillConnection>();
-            skillConn.indexes[0] = sc.first;  
-            skillConn.indexes[1] = sc.second;  
+            skillConn.indexes[0] = sc.first;
+            skillConn.indexes[1] = sc.second;
         }
 
         connections.transform.GetChild(0).GetComponent<LineRenderer>().startColor = Color.grey;

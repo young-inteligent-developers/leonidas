@@ -21,7 +21,7 @@ public class FieldConnection : MonoBehaviour
 
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
-        }, dColor, toColor, 0.3f)
+        }, lr.startColor, toColor, 0.3f)
             .setEase(LeanTweenType.easeInSine);
     }
 
