@@ -129,7 +129,7 @@ public class SkillTree : MonoBehaviour
                 
                 // Minus x points
                 points -= c;
-                SkillPoint.GetComponent<TextMeshProUGUI>().text = points.ToString(); // Start();
+                SkillPoint.GetComponent<TextMeshProUGUI>().text = points.ToString();
 
                 // Color change
                 s.RefreshSkillColor();
@@ -146,16 +146,16 @@ public class SkillTree : MonoBehaviour
 
         Debug.Log(c.transform.childCount);
 
-        for (int i = 0; i < c.transform.childCount; i++) //change to count element
+        for (int i = 0; i < c.transform.childCount; i++)
         {
             SkillConnection sc = c.transform.GetChild(i).GetComponent<SkillConnection>();
 
-            if (sc.skills[0].unlocked == false && sc.skills[1].unlocked == false)
-                cr = Color.red;
-            else if (sc.skills[0].unlocked == true && sc.skills[1].unlocked == true)
+            if (sc.skills[0].unlocked == true && sc.skills[1].unlocked == true)
                 cr = Color.green;
             else if (sc.skills[0].unlocked == true && sc.skills[1].canUnlock == true)
                 cr = Color.grey;
+            else
+                cr = Color.red;
 
             sc.GetComponent<LineRenderer>().startColor = cr;
             sc.GetComponent<LineRenderer>().endColor = cr;
