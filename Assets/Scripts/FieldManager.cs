@@ -45,8 +45,8 @@ public class FieldManager : MonoBehaviour
             else
                 continue;
 
-            Color c = os == Field.Ownership.Player ? new Color(0.501f, 0.905f, 0.976f) : new Color(0.976f, 0.450f, 0.450f);
-            fc.Highlight(c);
+            //Color c = os == Field.Ownership.Player ? new Color(0.501f, 0.905f, 0.976f, 0.902f) : new Color(0.962f, 0.213f, 0.292f, 0.902f);
+            fc.Highlight(new Color(1, 1, 1, 0.902f), true);
         }
 
         return null;
@@ -75,7 +75,7 @@ public class FieldManager : MonoBehaviour
         foreach (Field f in highlightedFields) f.Unhighlight();
         highlightedFields.Clear();
 
-        foreach (FieldConnection fc in highlightedConnections) fc.Unhighlight();
+        foreach (FieldConnection fc in highlightedConnections) fc.Unhighlight(true);
         highlightedConnections.Clear();
     }
 

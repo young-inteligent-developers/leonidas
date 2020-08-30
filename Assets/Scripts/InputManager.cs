@@ -20,7 +20,7 @@ public class InputManager : MonoBehaviour
     {
         if (currentInfo != null)
         {
-            currentInfo.fieldConnection.Unhighlight();
+            currentInfo.fieldConnection.Unhighlight(false);
             currentInfo = null;
         }
     }
@@ -35,9 +35,12 @@ public class InputManager : MonoBehaviour
         }
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 #elif UNITY_ANDROID || UNITY_IOS
-        if (Input.touchCount == 0 || Input.GetTouch(0).phase != TouchPhase.Ended) 
+        if (Input.touchCount == 0 || Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
+            CancelLineHighlight();
             return;
-        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 #endif
 
         /*RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
@@ -112,19 +115,18 @@ public class InputManager : MonoBehaviour
 
             foreach (FieldConnectionInfo i in fieldManager.selectedField.fcInfos)
             {
-                if (Mathf.Abs(Mathf.DeltaAngle(i.angle, angle)) <= 15)
+                if (Mathf.Abs(Mathf.DeltaAngle(i.angle, angle)) <= 20)
                 {
                     inRange = true;
                     if (i == currentInfo)
                         break;
 
                     CancelLineHighlight();
-                    i.fieldConnection.Highlight(Color.blue);
+                    i.fieldConnection.Highlight(new Color(0.154f, 0.768f, 0.934f, 0.902f), false);
                     currentInfo = i;
                 }
             }
-            if (!inRange)
-                CancelLineHighlight();
+            if (!inRange) CancelLineHighlight();
         }
     }
 }

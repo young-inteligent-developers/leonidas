@@ -7,6 +7,7 @@ public class FieldConnection : MonoBehaviour
     FieldManager manager;
     LineRenderer lr;
     Color dColor;
+    Color hColor = Color.black;
 
     private void Start()
     {
@@ -15,9 +16,10 @@ public class FieldConnection : MonoBehaviour
         dColor = lr.startColor;
     }
 
-    public void Highlight(Color toColor)
+    public void Highlight(Color toColor, bool save)
     {
         manager.highlightedConnections.Add(this);
+        if (save) hColor = toColor;
 
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
@@ -25,11 +27,15 @@ public class FieldConnection : MonoBehaviour
             .setEase(LeanTweenType.easeInSine);
     }
 
-    public void Unhighlight()
+    public void Unhighlight(bool clear)
     {
+        Color toColor = hColor == Color.black ? dColor : hColor;
+
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
-        }, lr.startColor, dColor, 0.3f)
+        }, lr.startColor, toColor, 0.3f)
             .setEase(LeanTweenType.easeOutSine);
+
+        if (clear) hColor = Color.black;
     }
 }
