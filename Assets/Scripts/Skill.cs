@@ -15,28 +15,36 @@ public class Skill : MonoBehaviour
     public int cost;
     public Skill nextSkill;
 
-    Color[] c = { Color.red, Color.gray, Color.green};
+    Color[] border = {new Color(0.65f, 0, 0, 1), new Color(0.23f, 0.23f, 0.23f, 1), new Color(0, 0.60f, 0, 1)};
+    Color[] insite = { Color.red, Color.gray, Color.green};
+
+    Image img;
 
     void Start()
     {
+        img = GetComponent<Image>();
+
         if (unlocked == false) 
         {
-            this.GetComponent<Image>().color = c[0];
+            img.color = border[0];
+            transform.GetChild(0).GetComponent<Image>().color = insite[0];
         }
 
-        RefreshSkill();
+        RefreshSkillColor();
     }
 
-    public void RefreshSkill()
+    public void RefreshSkillColor()
     {
         if (canUnlock == true)
         {
-            this.GetComponent<Image>().color = c[1];
+            img.color = border[1];
+            transform.GetChild(0).GetComponent<Image>().color = insite[1];
         }
 
         if (unlocked == true)
         {
-            this.GetComponent<Image>().color = c[2];
+            img.color = border[2];
+            transform.GetChild(0).GetComponent<Image>().color = insite[2];
         }
     }
 }
