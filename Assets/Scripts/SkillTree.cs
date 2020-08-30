@@ -18,17 +18,23 @@ public class SkillTree : MonoBehaviour
     public TextMeshProUGUI infoSkillPanelCost;
 
     private Skill skill;
+    SkillConnection skillConn;
 
     public Int2[] skillConnections;
 
     public GameObject element;
+    //public GameObject deffElement;
+    //public GameObject attaElement;
     public GameObject connections;
+    //public GameObject deffConnections;
+    //public GameObject attaConnections;
 
     void Start()
     {
         SkillPoint.GetComponent<TextMeshProUGUI>().text = points.ToString();
 
         RenderLines();
+        RefreshLineColor(connections);
     }
 
     public Skill GetSkill(int id, Transform t)
@@ -55,13 +61,10 @@ public class SkillTree : MonoBehaviour
             line.SetPosition(0, f);
             line.SetPosition(1, s);
 
-            SkillConnection skillConn = con.GetComponent<SkillConnection>();
-            skillConn.indexes[0] = sc.first;
-            skillConn.indexes[1] = sc.second;
+            skillConn = con.GetComponent<SkillConnection>();
+            skillConn.skills[0] = GetSkill(sc.first, defence.transform);
+            skillConn.skills[1] = GetSkill(sc.second, defence.transform); 
         }
-
-        connections.transform.GetChild(0).GetComponent<LineRenderer>().startColor = Color.grey;
-        connections.transform.GetChild(1).GetComponent<LineRenderer>().startColor = Color.grey;
     }
 
     public void ActivateDefence()
@@ -129,10 +132,35 @@ public class SkillTree : MonoBehaviour
                 SkillPoint.GetComponent<TextMeshProUGUI>().text = points.ToString(); // Start();
 
                 // Color change
-                s.RefreshSkill();
-                s.nextSkill.RefreshSkill();
+                s.RefreshSkillColor();
+                s.nextSkill.RefreshSkillColor();
+
+                RefreshLineColor(connections);
             }
         }
+    }
+
+    public void RefreshLineColor(GameObject c)
+    {
+        Color cr = Color.white;
+
+        Debug.Log(c.transform.childCount);
+
+        for (int i = 0; i < c.transform.childCount; i++) //change to count element
+        {
+            SkillConnection sc = c.transform.GetChild(i).GetComponent<SkillConnection>();
+
+            if (sc.skills[0].unlocked == false && sc.skills[1].unlocked == false)
+                cr = Color.red;
+            else if (sc.skills[0].unlocked == true && sc.skills[1].unlocked == true)
+                cr = Color.green;
+            else if (sc.skills[0].unlocked == true && sc.skills[1].canUnlock == true)
+                cr = Color.grey;
+
+            sc.GetComponent<LineRenderer>().startColor = cr;
+            sc.GetComponent<LineRenderer>().endColor = cr;
+        }
+        
     }
 
     public void CloseInfoSkillPanel()
