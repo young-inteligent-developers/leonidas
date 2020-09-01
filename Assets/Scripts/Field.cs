@@ -45,9 +45,9 @@ public class Field : MonoBehaviour
     public void Select()
     {
         manager.selectedField = this;
-        /*ShowInfo();
+        ShowInfo();
 
-        selectRing.transform.localScale = Vector3.one * 0.95f;
+        /*selectRing.transform.localScale = Vector3.one * 0.95f;
         LeanTween.scale(selectRing.gameObject, Vector3.one * 1.5f, 0.25f);
         LeanTween.alpha(selectRing.gameObject, 1, 0.07f);
         LeanTween.alpha(selectRing.gameObject, 0, 0.07f)
@@ -61,7 +61,7 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = null;
         HideInfo();
-        LeanTween.color(border.gameObject, colors[1], 0.33f);
+        //LeanTween.color(border.gameObject, colors[1], 0.33f);
     }
 
     public void Highlight()

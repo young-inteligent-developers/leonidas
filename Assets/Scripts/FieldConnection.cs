@@ -29,13 +29,12 @@ public class FieldConnection : MonoBehaviour
 
     public void Unhighlight(bool clear)
     {
+        if (clear) hColor = Color.black;
         Color toColor = hColor == Color.black ? dColor : hColor;
 
         LeanTween.value(gameObject, (Color c) => {
             lr.startColor = lr.endColor = c;
         }, lr.startColor, toColor, 0.3f)
             .setEase(LeanTweenType.easeOutSine);
-
-        if (clear) hColor = Color.black;
     }
 }
