@@ -93,7 +93,7 @@ public class InputManager : MonoBehaviour
         }
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 #elif UNITY_ANDROID || UNITY_IOS
-        if (Input.touchCount == 0 || Input.GetTouch(0).phase == TouchPhase.Ended)
+        if (Input.touchCount != 1)
         {
             startPos = new Vector2(-1, -1);
             inputPhase = 1;
@@ -130,7 +130,7 @@ public class InputManager : MonoBehaviour
         Field f = hit.transform.GetComponent<Field>();
         if (fieldManager.selectedField && fieldManager.selectedField != f)
             fieldManager.selectedField.Deselect();
-        else if (fieldManager.selectedField != f)
+        if (fieldManager.selectedField != f)
             f.Select();
     }
 
