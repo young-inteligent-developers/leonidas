@@ -106,14 +106,23 @@ public class InputManager : MonoBehaviour
         if (startPos == new Vector2(-1, -1))
             startPos = pos;
 
-        if (pos == startPos) OnClick(pos);
-        else if (!fieldManager.selectedField) OnSwipe(pos);
+        if (pos == startPos)
+        {
+            OnClick(pos);
+        }
+        else
+        {
+            if (fieldManager.selectedField)
+                fieldManager.selectedField.Deselect();
+
+            OnSwipe(pos);
+        }
     }
 
     void OnClick(Vector2 pos)
     {
 #if UNITY_EDITOR
-        if (!Input.GetMouseButtonUp(0)) { Debug.Log("XD?"); return; }
+        if (!Input.GetMouseButtonUp(0)) return;
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.GetTouch(0).phase != TouchPhase.Ended) return;
 #endif
@@ -132,6 +141,8 @@ public class InputManager : MonoBehaviour
             fieldManager.selectedField.Deselect();
         if (fieldManager.selectedField != f)
             f.Select();
+        else
+            f.Deselect();
     }
 
     void OnSwipe(Vector2 pos)
