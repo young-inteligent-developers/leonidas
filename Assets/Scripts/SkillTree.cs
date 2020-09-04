@@ -144,8 +144,6 @@ public class SkillTree : MonoBehaviour
     {
         Color cr = Color.white;
 
-        Debug.Log(c.transform.childCount);
-
         for (int i = 0; i < c.transform.childCount; i++)
         {
             SkillConnection sc = c.transform.GetChild(i).GetComponent<SkillConnection>();
@@ -159,8 +157,7 @@ public class SkillTree : MonoBehaviour
 
             sc.GetComponent<LineRenderer>().startColor = cr;
             sc.GetComponent<LineRenderer>().endColor = cr;
-        }
-        
+        }  
     }
 
     public void CloseInfoSkillPanel()
