@@ -13,6 +13,9 @@ public class FieldUI : MonoBehaviour
     public const float D_T_DEL      = 0.2f;     // defense text delay
     */
 
+    [HideInInspector]
+    public bool isAnimating = false;
+
     [Header("Animation curves")]
     public AnimationCurve defenseInAC;
     public AnimationCurve defenseOutAC;
@@ -25,6 +28,7 @@ public class FieldUI : MonoBehaviour
 
     public void DefenseIn()
     {
+        CancelTween();
         defenseBonus.transform.localScale = Vector3.one * 0.75f;
 
         LeanTween.scale(defenseBonus, Vector3.one, 0.3f)
@@ -41,6 +45,8 @@ public class FieldUI : MonoBehaviour
 
     public void DefenseOut()
     {
+        CancelTween();
+
         LeanTween.scale(defenseBonus, Vector3.one * 0.25f, 0.3f)
             .setEase(defenseOutAC);
         LeanTween.alpha(defenseBackground.GetComponent<RectTransform>(), 0, 0.15f)
@@ -52,5 +58,12 @@ public class FieldUI : MonoBehaviour
         }, defenseText.color.a, 0, 0.15f)
             .setDelay(0.05f)
             .setEase(LeanTweenType.easeInCubic);
+    }
+
+    void CancelTween()
+    {
+        LeanTween.cancel(defenseBonus.gameObject);
+        LeanTween.cancel(defenseBackground.gameObject);
+        LeanTween.cancel(defenseText.gameObject);
     }
 }

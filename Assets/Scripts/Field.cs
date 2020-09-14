@@ -23,6 +23,28 @@ public class Field : MonoBehaviour
     FieldUI fieldUI;
     Color[] colors = new Color[2];  // field fill [0] and border [1] colors
 
+    public static Color[] GetColors(Ownership os)
+    {
+        Color[] c = new Color[2];
+        switch (os)
+        {
+            case Ownership.Player:
+                c[0] = new Color(0.154f, 0.768f, 0.934f);
+                c[1] = new Color(0.501f, 0.905f, 0.976f);
+                break;
+            case Ownership.Neutral:
+                c[0] = new Color(0.470f, 0.420f, 0.622f);
+                c[1] = new Color(0.729f, 0.683f, 0.867f);
+                break;
+            case Ownership.Enemy:
+                c[0] = new Color(0.924f, 0.144f, 0.226f);
+                c[1] = new Color(0.976f, 0.450f, 0.450f);
+                break;
+        }
+
+        return c;
+    }
+
     public void Attack(int s)
     {
         if (strength - s < 0) return;
@@ -61,7 +83,6 @@ public class Field : MonoBehaviour
     {
         manager.selectedField = null;
         HideInfo();
-        //LeanTween.color(border.gameObject, colors[1], 0.33f);
     }
 
     public void Highlight()
@@ -81,13 +102,11 @@ public class Field : MonoBehaviour
 
     public void ShowInfo()
     {
-        manager.infoField = this;
         fieldUI.DefenseIn();
     }
 
     public void HideInfo()
     {
-        manager.infoField = null;
         fieldUI.DefenseOut();
     }
 
@@ -128,32 +147,17 @@ public class Field : MonoBehaviour
 
         // // // // // // // Field UI creation  // // // // // // //
 
+        Color c = colors[0]; c.a = 0;
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
         fieldUI = Instantiate(manager.strengthTextPrefab, manager.fieldUI).GetComponent<FieldUI>();
         fieldUI.GetComponent<RectTransform>().position = pos;
+        fieldUI.defenseBackground.color = c;
         fieldUI.unitText.text = strength.ToString();
         fieldUI.defenseText.text = defense.ToString();
     }
 
     void SetColors(Ownership os)
     {
-        Color[] c = { Color.white, Color.white };
-        switch (os)
-        {
-            case Ownership.Player:
-                c[0] = new Color(0.154f, 0.768f, 0.934f);
-                c[1] = new Color(0.501f, 0.905f, 0.976f);
-                break;
-            case Ownership.Neutral:
-                c[0] = new Color(0.470f, 0.420f, 0.622f);
-                c[1] = new Color(0.729f, 0.683f, 0.867f);
-                break;
-            case Ownership.Enemy:
-                c[0] = new Color(0.924f, 0.144f, 0.226f);
-                c[1] = new Color(0.976f, 0.450f, 0.450f);
-                break;
-        }
-
-        colors = c;
+        colors = GetColors(os);
     }
 }

@@ -16,8 +16,6 @@ public class FieldManager : MonoBehaviour
     public Field selectedField;
     [HideInInspector]
     public Field actionField;
-    [HideInInspector]
-    public Field infoField;
     List<Field> fields = new List<Field>();
     [HideInInspector]
     public List<Field> highlightedFields = new List<Field>();
@@ -33,23 +31,15 @@ public class FieldManager : MonoBehaviour
         return null;
     }
 
-    public List<FieldConnection> HighlightFieldConnections(int index)
+    public void HighlightFieldConnections(int index)
     {
         foreach (FieldConnection fc in fConnections)
         {
-            Field.Ownership os;
-            if (fc.connection.first == index)
-                os = GetField(fc.connection.second).ownership;
-            else if (fc.connection.second == index)
-                os = GetField(fc.connection.first).ownership;
-            else
+            if (fc.connection.first != index && fc.connection.second != index)
                 continue;
-
-            //Color c = os == Field.Ownership.Player ? new Color(0.501f, 0.905f, 0.976f, 0.902f) : new Color(0.962f, 0.213f, 0.292f, 0.902f);
-            fc.Highlight(new Color(1, 1, 1, 0.902f), true);
+            
+            fc.Highlight(new Color(1, 1, 1, FieldConnection.ALPHA), true);
         }
-
-        return null;
     }
 
     public void HighlightConnectedFields(int index)
@@ -102,6 +92,7 @@ public class FieldManager : MonoBehaviour
         {
             FieldConnection fCon = Instantiate(connectionPrefab, connections).GetComponent<FieldConnection>();
             fCon.connection = fc;
+            fCon.fields = new Field[] { GetField(fc.first), GetField(fc.second) };
             fConnections.Add(fCon);
 
             LineRenderer l = fCon.GetComponent<LineRenderer>();

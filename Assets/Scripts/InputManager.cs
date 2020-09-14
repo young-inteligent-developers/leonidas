@@ -4,9 +4,10 @@ public class InputManager : MonoBehaviour
 {
     public FieldManager fieldManager;
     public ActionPanel attackPanel;
-    public ActionPanel defensePanel;
+    public ActionPanel regroupPanel;
 
     int inputPhase                      = 1;
+    float idleTime                      = 0;
     Field swipedField                   = null;
     Vector2 startPos                    = new Vector2(-1, -1);
     FieldConnectionInfo currentInfo     = null;
@@ -29,68 +30,7 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        /*RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
-        if (!hit)
-        {
-            if (inputPhase == 2) 
-                CancelSelection();
-            else if (fieldManager.infoField != null) 
-                fieldManager.infoField.HideInfo();
-
-            return;
-        }
-
-        if (hit.transform.tag == "Field")
-        {
-            Field f = hit.transform.GetComponent<Field>();
-
-            if (inputPhase == 1)
-            { 
-                if (fieldManager.infoField != null && fieldManager.infoField != f)
-                    fieldManager.infoField.HideInfo();
-
-                if (f.ownership == Field.Ownership.Player)
-                {
-                    inputPhase++;
-                    f.Select();
-                    fieldManager.HighlightConnectedFields(f.index);
-                }
-                else
-                {
-                    f.ShowInfo();
-                }
-            }
-            else if (inputPhase == 2)
-            {
-                if (!f.highlighted)
-                {
-                    CancelSelection();
-                    f.ShowInfo();
-                    return;
-                }
-                    
-                //inputPhase++;
-                fieldManager.actionField = f;
-
-                ActionPanel ap;
-                if (fieldManager.actionField.ownership == fieldManager.selectedField.ownership)
-                    ap = defensePanel;
-                else
-                    ap = attackPanel;
-                ap.Set(fieldManager.selectedField.strength);
-                ap.Open();
-            }
-        }*/
-
 #if UNITY_EDITOR
-        if (!Input.GetMouseButton(0) && !Input.GetMouseButtonUp(0))
-        {
-            startPos = new Vector2(-1, -1);
-            inputPhase = 1;
-            fieldManager.UnhighlightConnectedFields();
-
-            return;
-        }
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount != 1)
@@ -103,26 +43,20 @@ public class InputManager : MonoBehaviour
         }
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 #endif
-        if (startPos == new Vector2(-1, -1))
+
+        if (Input.GetMouseButton(0) && startPos == new Vector2(-1, -1))
             startPos = pos;
 
-        if (pos == startPos)
-        {
-            OnClick(pos);
-        }
-        else
-        {
-            if (fieldManager.selectedField)
-                fieldManager.selectedField.Deselect();
-
-            OnSwipe(pos);
-        }
+        DetectSwipe(pos);
+        DetectClick(pos);   
     }
 
-    void OnClick(Vector2 pos)
+    void DetectClick(Vector2 pos)
     {
 #if UNITY_EDITOR
-        if (!Input.GetMouseButtonUp(0)) return;
+        //if (pos == startPos && idleTime < 1) return;
+        //Debug.Log(idleTime < 1 && (!Input.GetMouseButtonUp(0) || swipedField));
+        if (!Input.GetMouseButtonUp(0) || swipedField) return;
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.GetTouch(0).phase != TouchPhase.Ended) return;
 #endif
@@ -130,13 +64,12 @@ public class InputManager : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
         if (!hit || hit.transform.tag != "Field")
         {
-            if (fieldManager.selectedField)
-                fieldManager.selectedField.Deselect();
-
+            DeselectField();
             return;
         }
-
+        
         Field f = hit.transform.GetComponent<Field>();
+        //Debug.Log("Selected field:\t" + (fieldManager.selectedField != f));
         if (fieldManager.selectedField && fieldManager.selectedField != f)
             fieldManager.selectedField.Deselect();
         if (fieldManager.selectedField != f)
@@ -145,15 +78,59 @@ public class InputManager : MonoBehaviour
             f.Deselect();
     }
 
-    void OnSwipe(Vector2 pos)
+    void DetectSwipe(Vector2 pos)
     {
+#if UNITY_EDITOR
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (fieldManager.actionField)
+            {
+                ActionPanel ap;
+                if (fieldManager.actionField.ownership == Field.Ownership.Player)
+                    ap = regroupPanel;
+                else
+                    ap = attackPanel;
+                ap.Set(swipedField.strength);
+                ap.Open();
+            }
+
+            startPos = new Vector2(-1, -1);
+            inputPhase = 1;
+            idleTime = 0;
+            swipedField = null;
+            fieldManager.actionField = null;
+            fieldManager.UnhighlightConnectedFields();
+
+            return;
+        }
+        if (!Input.GetMouseButton(0))
+        {
+            return;
+        }
+#elif UNITY_ANDROID || UNITY_IOS
+        if (Input.GetTouch(0).phase != TouchPhase.Ended) return;
+#endif
+         
         RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
         if (inputPhase == 1 && hit && hit.transform.tag == "Field")
         {
             Field f = hit.transform.GetComponent<Field>();
             if (f.ownership != Field.Ownership.Player)
                 return;
+            if (pos == startPos)
+            {
+                if (idleTime >= 0.6f)
+                {
+                    if (fieldManager.selectedField && fieldManager.selectedField != f)
+                        fieldManager.selectedField.Deselect();
+                    if (!fieldManager.selectedField)
+                        f.Select();
+                }
+                idleTime += Time.deltaTime;
+                return;
+            }
 
+            DeselectField();
             inputPhase = 2;
             swipedField = f;
             fieldManager.HighlightFieldConnections(f.index);
@@ -174,11 +151,21 @@ public class InputManager : MonoBehaviour
                         break;
 
                     CancelLineHighlight(false);
-                    i.fieldConnection.Highlight(new Color(0.154f, 0.768f, 0.934f, 0.902f), false);
+                    i.fieldConnection.HighlightSwipe(swipedField.index);
                     currentInfo = i;
                 }
             }
-            if (!inRange) CancelLineHighlight(false);
+            if (!inRange)
+            {
+                fieldManager.actionField = null;
+                CancelLineHighlight(false);
+            }    
         }
+    }
+
+    void DeselectField()
+    {
+        if (fieldManager.selectedField)
+            fieldManager.selectedField.Deselect();
     }
 }

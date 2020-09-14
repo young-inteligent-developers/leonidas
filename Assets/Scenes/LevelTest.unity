@@ -1485,7 +1485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fieldManager: {fileID: 2092806736}
   attackPanel: {fileID: 579567507}
-  defensePanel: {fileID: 1564277287}
+  regroupPanel: {fileID: 1564277287}
 --- !u!1 &662941863
 GameObject:
   m_ObjectHideFlags: 0
@@ -5402,7 +5402,7 @@ MonoBehaviour:
   index: 3
   strength: 5
   defense: 1
-  ownership: 2
+  ownership: 0
 --- !u!58 &1628079307
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6526,7 +6526,6 @@ MonoBehaviour:
   fieldUI: {fileID: 75824984}
   selectedField: {fileID: 0}
   actionField: {fileID: 0}
-  infoField: {fileID: 0}
   highlightedFields: []
   highlightedConnections: []
 --- !u!1 &2117273243
