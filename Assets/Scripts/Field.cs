@@ -50,8 +50,9 @@ public class Field : MonoBehaviour
         if (strength - s < 0) return;
 
         Field f = manager.actionField;
-        if (s > f.strength) f.SetOwnership(ownership);
-        f.SetStrength(Mathf.Abs(f.strength - s));
+        int fs = s / f.defense;
+        if (fs > f.strength) f.SetOwnership(ownership);
+        f.SetStrength(Mathf.Abs(f.strength - fs));
         SetStrength(strength - s);
     }
 
@@ -124,7 +125,9 @@ public class Field : MonoBehaviour
 
         ownership = os;
         SetColors(os);
-        LeanTween.color(fill.gameObject, colors[0], 0.3f)
+        LeanTween.color(fill.gameObject, colors[0], 0.2f)
+            .setEase(LeanTweenType.easeInSine);
+        LeanTween.color(border.gameObject, colors[1], 0.2f)
             .setEase(LeanTweenType.easeInSine);
     }
 

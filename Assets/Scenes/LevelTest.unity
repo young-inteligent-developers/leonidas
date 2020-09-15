@@ -1486,6 +1486,7 @@ MonoBehaviour:
   fieldManager: {fileID: 2092806736}
   attackPanel: {fileID: 579567507}
   regroupPanel: {fileID: 1564277287}
+  swipedField: {fileID: 0}
 --- !u!1 &662941863
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,7 +2248,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 579567507}
         m_MethodName: Close
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4627,7 +4628,7 @@ MonoBehaviour:
   highlighted: 0
   index: 5
   strength: 6
-  defense: 1
+  defense: 2
   ownership: 1
 --- !u!58 &1446216565
 CircleCollider2D:
@@ -5694,25 +5695,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1737873929
-Animator:
-  serializedVersion: 3
+--- !u!114 &1737873929
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1737873926}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: af3f7fd7c540fb24ea535cd168c31e01, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c13d52b9b9ba445b83a5656f122c15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTime: 4
 --- !u!1 &1773896309
 GameObject:
   m_ObjectHideFlags: 0
@@ -6005,7 +6000,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1564277287}
         m_MethodName: Close
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

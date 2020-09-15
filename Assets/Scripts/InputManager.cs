@@ -6,18 +6,14 @@ public class InputManager : MonoBehaviour
     public ActionPanel attackPanel;
     public ActionPanel regroupPanel;
 
+    [HideInInspector]
+    public Field swipedField            = null;
+
     int inputPhase                      = 1;
     float idleTime                      = 0;
-    Field swipedField                   = null;
+    
     Vector2 startPos                    = new Vector2(-1, -1);
     FieldConnectionInfo currentInfo     = null;
-
-    public void CancelSelection()
-    {
-        inputPhase = 1;
-        //fieldManager.selectedField.Deselect();
-        fieldManager.UnhighlightConnectedFields();
-    }
 
     public void CancelLineHighlight(bool c)
     {
@@ -32,20 +28,14 @@ public class InputManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-#elif UNITY_ANDROID || UNITY_IOS
-        if (Input.touchCount != 1)
-        {
-            startPos = new Vector2(-1, -1);
-            inputPhase = 1;
-            fieldManager.UnhighlightConnectedFields();
-
-            return;
-        }
-        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-#endif
-
         if (Input.GetMouseButton(0) && startPos == new Vector2(-1, -1))
             startPos = pos;
+#elif UNITY_ANDROID || UNITY_IOS
+        if (Input.touchCount == 0) return;
+        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+        if (startPos == new Vector2(-1, -1))
+            startPos = pos;
+#endif
 
         DetectSwipe(pos);
         DetectClick(pos);   
@@ -54,12 +44,11 @@ public class InputManager : MonoBehaviour
     void DetectClick(Vector2 pos)
     {
 #if UNITY_EDITOR
-        //if (pos == startPos && idleTime < 1) return;
-        //Debug.Log(idleTime < 1 && (!Input.GetMouseButtonUp(0) || swipedField));
         if (!Input.GetMouseButtonUp(0) || swipedField) return;
 #elif UNITY_ANDROID || UNITY_IOS
-        if (Input.GetTouch(0).phase != TouchPhase.Ended) return;
+        if (Input.touchCount == 0 || Input.GetTouch(0).phase != TouchPhase.Ended || swipedField) return;
 #endif
+        if (regroupPanel.gameObject.activeInHierarchy || attackPanel.gameObject.activeInHierarchy) return;
 
         RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
         if (!hit || hit.transform.tag != "Field")
@@ -69,7 +58,6 @@ public class InputManager : MonoBehaviour
         }
         
         Field f = hit.transform.GetComponent<Field>();
-        //Debug.Log("Selected field:\t" + (fieldManager.selectedField != f));
         if (fieldManager.selectedField && fieldManager.selectedField != f)
             fieldManager.selectedField.Deselect();
         if (fieldManager.selectedField != f)
@@ -93,12 +81,14 @@ public class InputManager : MonoBehaviour
                 ap.Set(swipedField.strength);
                 ap.Open();
             }
+            else
+            {
+                swipedField = null;
+            }
 
             startPos = new Vector2(-1, -1);
             inputPhase = 1;
             idleTime = 0;
-            swipedField = null;
-            fieldManager.actionField = null;
             fieldManager.UnhighlightConnectedFields();
 
             return;
@@ -108,10 +98,37 @@ public class InputManager : MonoBehaviour
             return;
         }
 #elif UNITY_ANDROID || UNITY_IOS
-        if (Input.GetTouch(0).phase != TouchPhase.Ended) return;
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
+            if (fieldManager.actionField)
+            {
+                ActionPanel ap;
+                if (fieldManager.actionField.ownership == Field.Ownership.Player)
+                    ap = regroupPanel;
+                else
+                    ap = attackPanel;
+                ap.Set(swipedField.strength);
+                ap.Open();
+            }
+            else
+            {
+                swipedField = null;
+            }
+
+            startPos = new Vector2(-1, -1);
+            inputPhase = 1;
+            idleTime = 0;
+            fieldManager.UnhighlightConnectedFields();
+
+            return;
+        }
+        if (Input.touchCount == 0)
+        {
+            return;
+        }
 #endif
-         
-        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.up, 0.01f);
+
+        RaycastHit2D hit = Physics2D.Raycast(startPos, Vector2.up, 0.01f);
         if (inputPhase == 1 && hit && hit.transform.tag == "Field")
         {
             Field f = hit.transform.GetComponent<Field>();

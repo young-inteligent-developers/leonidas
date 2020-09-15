@@ -4,6 +4,7 @@ using TMPro;
 
 public class ActionPanel : MonoBehaviour
 {
+    [Header("Objects")]
     public InputManager inputManager;
     public FieldManager fieldManager;
     public TextMeshProUGUI strengthText;
@@ -21,10 +22,11 @@ public class ActionPanel : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void Close(bool cancelSelection)
+    public void Close()
     {
+        fieldManager.actionField = null;
+        inputManager.swipedField = null;
         inputManager.enabled = true;
-        if (cancelSelection) inputManager.CancelSelection();
         gameObject.SetActive(false);
     }
 
@@ -41,13 +43,13 @@ public class ActionPanel : MonoBehaviour
 
     public void Attack()
     {
-        fieldManager.selectedField.Attack(strength);
-        Close(true);
+        inputManager.swipedField.Attack(strength);
+        Close();
     }
 
     public void Regroup()
     {
-        fieldManager.selectedField.Regroup(strength);
-        Close(true);
+        inputManager.swipedField.Regroup(strength);
+        Close();
     }
 }
