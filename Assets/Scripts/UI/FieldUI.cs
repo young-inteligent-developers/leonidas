@@ -4,15 +4,6 @@ using TMPro;
 
 public class FieldUI : MonoBehaviour
 {
-    /*
-    public const float D_S          = 0.75f;    // defense bonus container scale
-    public const float D_S_DUR      = 0.175f;   // defense bonus container scale duration
-    public const float D_B_DUR      = 0.1f;     // defense background duration
-    public const float D_B_DEL      = 0.1f;     // defense background delay
-    public const float D_T_DUR      = 0.1f;     // defense text duration
-    public const float D_T_DEL      = 0.2f;     // defense text delay
-    */
-
     [HideInInspector]
     public bool isAnimating = false;
 
@@ -28,7 +19,7 @@ public class FieldUI : MonoBehaviour
 
     public void DefenseIn()
     {
-        CancelTween();
+        CancelAllTweens();
         defenseBonus.transform.localScale = Vector3.one * 0.75f;
 
         LeanTween.scale(defenseBonus, Vector3.one, 0.3f)
@@ -45,7 +36,7 @@ public class FieldUI : MonoBehaviour
 
     public void DefenseOut()
     {
-        CancelTween();
+        CancelAllTweens();
 
         LeanTween.scale(defenseBonus, Vector3.one * 0.25f, 0.3f)
             .setEase(defenseOutAC);
@@ -60,7 +51,17 @@ public class FieldUI : MonoBehaviour
             .setEase(LeanTweenType.easeInCubic);
     }
 
-    void CancelTween()
+    public void UpdateColor(Color c)
+    {
+        c.a = defenseBackground.color.a;
+        LeanTween.cancel(defenseBackground.gameObject);
+        LeanTween.value(defenseBackground.gameObject, (Color col) => {
+            defenseBackground.color = col;
+        }, defenseBackground.color, c, 0.2f)
+            .setEase(LeanTweenType.easeInSine);
+    }
+
+    void CancelAllTweens()
     {
         LeanTween.cancel(defenseBonus.gameObject);
         LeanTween.cancel(defenseBackground.gameObject);

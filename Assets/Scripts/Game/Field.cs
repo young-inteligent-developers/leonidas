@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Field : MonoBehaviour
 {
+    public const float RM_DUR = 3f;     // random move tween time duration
     public enum Ownership { Player, Neutral, Enemy }
 
     [HideInInspector]
     public bool highlighted;
     [HideInInspector]
-    public int ctStrength;          // current turn strength (prevents from many attacking and regrouping attempts)
+    public int ctStrength;              // current turn strength (prevents from many attacking and regrouping attempts)
     [HideInInspector]
     public List<FieldConnectionInfo> fcInfos = new List<FieldConnectionInfo>();
 
@@ -22,7 +24,8 @@ public class Field : MonoBehaviour
     SpriteRenderer fill;
     SpriteRenderer border;
     FieldUI fieldUI;
-    Color[] colors = new Color[2];  // field fill [0] and border [1] colors
+    Vector3 startPos;
+    Color[] colors = new Color[2];      // field fill [0] and border [1] colors
 
     public static Color[] GetColors(Ownership os)
     {
@@ -57,6 +60,9 @@ public class Field : MonoBehaviour
         {
             f.SetOwnership(ownership);
             f.SetStrength(s - f.strength * f.defense, false);
+
+            if (manager.IsGameOver())
+                GameManager.instance.EndGame();
         }
         else
         {
@@ -134,6 +140,7 @@ public class Field : MonoBehaviour
 
         ownership = os;
         SetColors(os);
+        fieldUI.UpdateColor(colors[0]);
         LeanTween.color(fill.gameObject, colors[0], 0.2f)
             .setEase(LeanTweenType.easeInSine);
         LeanTween.color(border.gameObject, colors[1], 0.2f)
@@ -152,6 +159,7 @@ public class Field : MonoBehaviour
         // // // // // // // Properties assignment // // // // // // //
 
         ctStrength = strength;
+        startPos = transform.position;
 
 
         // // // // // // // Field color assignment according its ownership // // // // // // //
@@ -170,10 +178,36 @@ public class Field : MonoBehaviour
         fieldUI.defenseBackground.color = c;
         fieldUI.unitText.text = strength.ToString();
         fieldUI.defenseText.text = defense.ToString();
+
+
+        // // // // // // // Repeatedly random move  // // // // // // // 
+
+        RandomMove();
     }
 
     void SetColors(Ownership os)
     {
         colors = GetColors(os);
+    }
+
+    void RandomMove()
+    {
+        // Added some game logic, removed an input bug
+        Vector3 pos = startPos + RandomPosition();
+        float t = Vector3.Distance(transform.position, pos) / 0.2f * RM_DUR;
+        RectTransform rt = fieldUI.GetComponent<RectTransform>();    
+        LeanTween.move(gameObject, pos, t);
+        LeanTween.value(fieldUI.gameObject, (Vector3 v) => {
+            rt.position = v;
+        }, rt.position, Camera.main.WorldToScreenPoint(pos), t)
+            .setOnComplete(RandomMove);
+
+        //yield return new WaitForSeconds(t);
+        //StartCoroutine(RandomMove());
+    }
+
+    Vector3 RandomPosition()
+    {
+        return new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), startPos.z).normalized * Random.Range(0, 0.1f);
     }
 }

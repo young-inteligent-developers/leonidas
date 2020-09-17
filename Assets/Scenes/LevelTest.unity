@@ -325,6 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighted: 0
+  ctStrength: 0
   index: 4
   strength: 30
   defense: 1
@@ -393,6 +394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighted: 0
+  ctStrength: 0
   index: 2
   strength: 5
   defense: 1
@@ -2062,6 +2064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighted: 0
+  ctStrength: 0
   index: 6
   strength: 9
   defense: 1
@@ -3270,6 +3273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighted: 0
+  ctStrength: 0
   index: 1
   strength: 7
   defense: 1
@@ -4626,6 +4630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighted: 0
+  ctStrength: 0
   index: 5
   strength: 6
   defense: 2
@@ -5400,6 +5405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighted: 0
+  ctStrength: 0
   index: 3
   strength: 5
   defense: 1
@@ -5913,7 +5919,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerTurn: 1
   turn: 1
+  gamePoints: 50
+  unlockPoints: 50
   recruitmentBonus: 3
+  inputManager: {fileID: 659240053}
   fieldManager: {fileID: 2092806736}
   turnText: {fileID: 871281554}
 --- !u!1 &1835932639

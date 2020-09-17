@@ -15,6 +15,14 @@ public class InputManager : MonoBehaviour
     Vector2 startPos                    = new Vector2(-1, -1);
     FieldConnectionInfo currentInfo     = null;
 
+    public void ResetInput()
+    {
+        startPos = new Vector2(-1, -1);
+        inputPhase = 1;
+        idleTime = 0;
+        fieldManager.UnhighlightConnectedFields();
+    }
+
     public void CancelLineHighlight(bool c)
     {
         if (currentInfo != null)
@@ -28,7 +36,7 @@ public class InputManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (Input.GetMouseButton(0) && startPos == new Vector2(-1, -1))
+        if (Input.GetMouseButtonDown(0) && startPos == new Vector2(-1, -1))
             startPos = pos;
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount == 0) return;
@@ -86,10 +94,7 @@ public class InputManager : MonoBehaviour
                 swipedField = null;
             }
 
-            startPos = new Vector2(-1, -1);
-            inputPhase = 1;
-            idleTime = 0;
-            fieldManager.UnhighlightConnectedFields();
+            ResetInput();
 
             return;
         }
@@ -127,7 +132,7 @@ public class InputManager : MonoBehaviour
             return;
         }
 #endif
-
+        
         RaycastHit2D hit = Physics2D.Raycast(startPos, Vector2.up, 0.01f);
         if (inputPhase == 1 && hit && hit.transform.tag == "Field")
         {

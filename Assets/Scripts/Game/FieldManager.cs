@@ -39,6 +39,16 @@ public class FieldManager : MonoBehaviour
         }
     }
 
+    public bool IsGameOver()
+    {
+        int nonPlayerFields = 0;
+        foreach (Field f in fields)
+            if (f.ownership != Field.Ownership.Player)
+                nonPlayerFields++;
+
+        return nonPlayerFields == 0;
+    }
+
     public void HighlightFieldConnections(int index)
     {
         foreach (FieldConnection fc in fConnections)
