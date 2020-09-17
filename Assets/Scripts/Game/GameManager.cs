@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     {
         isPlayerTurn = !isPlayerTurn;
         SetTurn(turn + 1);
+        fieldManager.OnStartOfTurn();
 
         if (isPlayerTurn)
         {

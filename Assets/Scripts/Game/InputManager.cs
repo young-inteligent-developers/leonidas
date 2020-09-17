@@ -78,7 +78,7 @@ public class InputManager : MonoBehaviour
                     ap = regroupPanel;
                 else
                     ap = attackPanel;
-                ap.Set(swipedField.strength);
+                ap.Set(swipedField.ctStrength);
                 ap.Open();
             }
             else
@@ -107,7 +107,7 @@ public class InputManager : MonoBehaviour
                     ap = regroupPanel;
                 else
                     ap = attackPanel;
-                ap.Set(swipedField.strength);
+                ap.Set(swipedField.ctStrength);
                 ap.Open();
             }
             else

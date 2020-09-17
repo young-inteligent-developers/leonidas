@@ -31,6 +31,14 @@ public class FieldManager : MonoBehaviour
         return null;
     }
 
+    public void OnStartOfTurn()
+    {
+        foreach (Field f in fields)
+        {
+            f.ctStrength = f.strength;
+        }
+    }
+
     public void HighlightFieldConnections(int index)
     {
         foreach (FieldConnection fc in fConnections)
@@ -73,14 +81,14 @@ public class FieldManager : MonoBehaviour
     {
         foreach (Field f in fields)
             if (f.ownership == os)
-                f.SetStrength(f.strength + v);
+                f.SetStrength(f.strength + v, true);
     }
 
     public void DecreaseUnits(Field.Ownership os, int v)
     {
         foreach (Field f in fields)
             if (f.ownership == os)
-                f.SetStrength(f.strength - v);
+                f.SetStrength(f.strength - v, true);
     }
 
     void Start()

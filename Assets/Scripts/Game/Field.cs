@@ -8,6 +8,8 @@ public class Field : MonoBehaviour
     [HideInInspector]
     public bool highlighted;
     [HideInInspector]
+    public int ctStrength;          // current turn strength (prevents from many attacking and regrouping attempts)
+    [HideInInspector]
     public List<FieldConnectionInfo> fcInfos = new List<FieldConnectionInfo>();
 
     [Header("Field properties")]
@@ -19,7 +21,6 @@ public class Field : MonoBehaviour
     FieldManager manager;
     SpriteRenderer fill;
     SpriteRenderer border;
-    SpriteRenderer selectRing;
     FieldUI fieldUI;
     Color[] colors = new Color[2];  // field fill [0] and border [1] colors
 
@@ -48,21 +49,28 @@ public class Field : MonoBehaviour
     public void Attack(int s)
     {
         if (strength - s < 0) return;
-
+            
+        SetStrength(strength - s, true);
         Field f = manager.actionField;
-        int fs = s / f.defense;
-        if (fs > f.strength) f.SetOwnership(ownership);
-        f.SetStrength(Mathf.Abs(f.strength - fs));
-        SetStrength(strength - s);
+        f.ctStrength = 0;
+        if (s > f.strength * f.defense)
+        {
+            f.SetOwnership(ownership);
+            f.SetStrength(s - f.strength * f.defense, false);
+        }
+        else
+        {
+            f.SetStrength(f.strength - s / f.defense, false);
+        }
     }
 
     public void Regroup(int s)
     {
-        if (strength - s < 0) return;
+        if (ctStrength - s < 0) return;
 
         Field f = manager.actionField;
-        f.SetStrength(f.strength + s);
-        SetStrength(strength - s);
+        f.SetStrength(f.strength + s, false);
+        SetStrength(strength - s, true);
     }
 
     public void Select()
@@ -111,11 +119,12 @@ public class Field : MonoBehaviour
         fieldUI.DefenseOut();
     }
 
-    public void SetStrength(int s)
+    public void SetStrength(int s, bool updateCt)
     {
         if (s == strength) return;
 
         strength = s;
+        if (updateCt) ctStrength = s;
         fieldUI.unitText.text = s.ToString();
     }
 
@@ -138,11 +147,15 @@ public class Field : MonoBehaviour
         manager = transform.parent.GetComponent<FieldManager>();
         fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
         border = transform.Find("Border").GetComponent<SpriteRenderer>();
-        selectRing = transform.Find("Select ring").GetComponent<SpriteRenderer>();
+
+
+        // // // // // // // Properties assignment // // // // // // //
+
+        ctStrength = strength;
 
 
         // // // // // // // Field color assignment according its ownership // // // // // // //
-        
+
         SetColors(ownership);
         fill.color = colors[0];
         border.color = colors[1];
