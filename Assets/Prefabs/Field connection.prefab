@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2205826523250407089}
   - component: {fileID: 2205826523250407088}
   - component: {fileID: 1131526423573607924}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Field connection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,3 +144,6 @@ MonoBehaviour:
   connection:
     first: 0
     second: 0
+  fields:
+  - {fileID: 0}
+  - {fileID: 0}

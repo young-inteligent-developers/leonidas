@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector]
+    [NonSerialized]
     public bool isPlayerTurn    = true;
-    [HideInInspector]
+    [NonSerialized]
     public int turn             = 1;
-    [HideInInspector]
+    [NonSerialized]
     public int gamePoints       = 50;
-    [HideInInspector]
+    [NonSerialized]
     public int unlockPoints     = 50;
 
     [Header("Properties")]
@@ -21,6 +22,15 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI turnText;
 
     public static GameManager instance;
+
+    void Start()
+    {
+        if (!instance)
+        {
+            DontDestroyOnLoad(this);
+            instance = this;
+        }
+    }
 
     public void EndGame()
     {
@@ -50,14 +60,5 @@ public class GameManager : MonoBehaviour
     {
         turn = v;
         turnText.text = v.ToString();
-    }
-
-    void Start()
-    {
-        if (!instance)
-        {
-            DontDestroyOnLoad(this);
-            instance = this;
-        }
     }
 }

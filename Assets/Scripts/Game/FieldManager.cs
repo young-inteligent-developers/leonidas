@@ -23,6 +23,33 @@ public class FieldManager : MonoBehaviour
     [HideInInspector]
     public List<FieldConnection> highlightedConnections = new List<FieldConnection>();
 
+    void Start()
+    {
+        for (int i = 0; i < transform.childCount - 1; i++)
+            fields.Add(transform.GetChild(i).GetComponent<Field>());
+
+        foreach (Int2 fc in fieldConnections)
+        {
+            FieldConnection fCon = Instantiate(connectionPrefab, connections).GetComponent<FieldConnection>();
+            fCon.connection = fc;
+            fCon.fields = new Field[] { GetField(fc.first), GetField(fc.second) };
+            fConnections.Add(fCon);
+
+            Vector3 f = fCon.fields[0].transform.position; f.z = 1;
+            Vector3 s = fCon.fields[1].transform.position; s.z = 1;
+            LineRenderer l = fCon.GetComponent<LineRenderer>();
+            l.SetPosition(0, f);
+            l.SetPosition(1, s);
+
+            FieldConnectionInfo i = new FieldConnectionInfo();
+            i.fieldConnection = fCon;
+            i.SetAngle(f, s);
+            GetField(fc.first).fcInfos.Add(new FieldConnectionInfo(i));
+            i.SetAngle(s, f);
+            GetField(fc.second).fcInfos.Add(new FieldConnectionInfo(i));
+        }
+    }
+
     public Field GetField(int index)
     {
         if (index > 0 && index <= transform.childCount - 1)
@@ -99,34 +126,5 @@ public class FieldManager : MonoBehaviour
         foreach (Field f in fields)
             if (f.ownership == os)
                 f.SetStrength(f.strength - v, true);
-    }
-
-    void Start()
-    {
-        for (int i = 0; i < transform.childCount - 1; i++)
-            fields.Add(transform.GetChild(i).GetComponent<Field>());
-
-        foreach (Int2 fc in fieldConnections)
-        {
-            FieldConnection fCon = Instantiate(connectionPrefab, connections).GetComponent<FieldConnection>();
-            fCon.connection = fc;
-            fCon.fields = new Field[] { GetField(fc.first), GetField(fc.second) };
-            fConnections.Add(fCon);
-
-            LineRenderer l = fCon.GetComponent<LineRenderer>();
-            Vector3 f = GetField(fc.first).transform.position; f.z = 1;
-            Vector3 s = GetField(fc.second).transform.position; s.z = 1;
-            float d = Vector2.Distance(f, s);
-
-            l.SetPosition(0, Vector3.Lerp(f, s, 1 / d * 0.45f));
-            l.SetPosition(1, Vector3.Lerp(s, f, 1 / d * 0.45f));
-
-            FieldConnectionInfo i = new FieldConnectionInfo();
-            i.fieldConnection = fCon;
-            i.SetAngle(f, s);
-            GetField(fc.first).fcInfos.Add(new FieldConnectionInfo(i));
-            i.SetAngle(s, f);
-            GetField(fc.second).fcInfos.Add(new FieldConnectionInfo(i));
-        }
     }
 }

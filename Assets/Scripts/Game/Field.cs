@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Field : MonoBehaviour
 {
-    public const float RM_DUR = 3f;     // random move tween time duration
+    public const float RM_DUR = 8f;     // random move tween time duration
     public enum Ownership { Player, Neutral, Enemy }
 
     [HideInInspector]
@@ -26,6 +26,45 @@ public class Field : MonoBehaviour
     FieldUI fieldUI;
     Vector3 startPos;
     Color[] colors = new Color[2];      // field fill [0] and border [1] colors
+
+    void Start()
+    {
+        // // // // // // // Private components assignment  // // // // // // //
+
+        manager = transform.parent.GetComponent<FieldManager>();
+        fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
+        border = transform.Find("Border").GetComponent<SpriteRenderer>();
+
+
+        // // // // // // // Properties assignment // // // // // // //
+
+        ctStrength = strength;
+        startPos = transform.position;
+
+
+        // // // // // // // Field color assignment according its ownership // // // // // // //
+
+        SetColors(ownership);
+        fill.color = colors[0];
+        border.color = colors[1];
+
+
+        // // // // // // // Field UI creation  // // // // // // //
+
+        Color c = colors[0]; c.a = 0;
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+        fieldUI = Instantiate(manager.strengthTextPrefab, manager.fieldUI).GetComponent<FieldUI>();
+        fieldUI.fieldTransform = transform;
+        fieldUI.rt.position = pos;
+        fieldUI.defenseBackground.color = c;
+        fieldUI.unitText.text = strength.ToString();
+        fieldUI.defenseText.text = defense.ToString();
+
+
+        // // // // // // // Repeatedly random move  // // // // // // // 
+
+        RandomMove();
+    }
 
     public static Color[] GetColors(Ownership os)
     {
@@ -147,44 +186,6 @@ public class Field : MonoBehaviour
             .setEase(LeanTweenType.easeInSine);
     }
 
-    void Start()
-    {
-        // // // // // // // Private components assignment  // // // // // // //
-
-        manager = transform.parent.GetComponent<FieldManager>();
-        fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
-        border = transform.Find("Border").GetComponent<SpriteRenderer>();
-
-
-        // // // // // // // Properties assignment // // // // // // //
-
-        ctStrength = strength;
-        startPos = transform.position;
-
-
-        // // // // // // // Field color assignment according its ownership // // // // // // //
-
-        SetColors(ownership);
-        fill.color = colors[0];
-        border.color = colors[1];
-
-
-        // // // // // // // Field UI creation  // // // // // // //
-
-        Color c = colors[0]; c.a = 0;
-        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        fieldUI = Instantiate(manager.strengthTextPrefab, manager.fieldUI).GetComponent<FieldUI>();
-        fieldUI.GetComponent<RectTransform>().position = pos;
-        fieldUI.defenseBackground.color = c;
-        fieldUI.unitText.text = strength.ToString();
-        fieldUI.defenseText.text = defense.ToString();
-
-
-        // // // // // // // Repeatedly random move  // // // // // // // 
-
-        RandomMove();
-    }
-
     void SetColors(Ownership os)
     {
         colors = GetColors(os);
@@ -192,18 +193,14 @@ public class Field : MonoBehaviour
 
     void RandomMove()
     {
-        // Added some game logic, removed an input bug
         Vector3 pos = startPos + RandomPosition();
         float t = Vector3.Distance(transform.position, pos) / 0.2f * RM_DUR;
         RectTransform rt = fieldUI.GetComponent<RectTransform>();    
-        LeanTween.move(gameObject, pos, t);
-        LeanTween.value(fieldUI.gameObject, (Vector3 v) => {
-            rt.position = v;
-        }, rt.position, Camera.main.WorldToScreenPoint(pos), t)
+        LeanTween.move(gameObject, pos, t)
             .setOnComplete(RandomMove);
-
-        //yield return new WaitForSeconds(t);
-        //StartCoroutine(RandomMove());
+        /*LeanTween.value(fieldUI.gameObject, (Vector3 v) => {
+            rt.position = v;
+        }, rt.position, Camera.main.WorldToScreenPoint(pos), t);*/
     }
 
     Vector3 RandomPosition()

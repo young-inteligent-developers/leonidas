@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class FieldUI : MonoBehaviour
 {
-    [HideInInspector]
-    public bool isAnimating = false;
+    [NonSerialized]
+    public RectTransform rt;
+    [NonSerialized]
+    public Transform fieldTransform;
 
     [Header("Animation curves")]
     public AnimationCurve defenseInAC;
@@ -16,6 +19,17 @@ public class FieldUI : MonoBehaviour
     public TextMeshProUGUI defenseText;
     public GameObject defenseBonus;
     public Image defenseBackground;
+
+    void Awake()
+    {
+        rt = GetComponent<RectTransform>();
+    }
+
+    void Update()
+    {
+        Vector3 pos = Camera.main.WorldToScreenPoint(fieldTransform.position);
+        rt.position = pos;
+    }
 
     public void DefenseIn()
     {

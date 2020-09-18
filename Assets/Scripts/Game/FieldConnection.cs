@@ -14,11 +14,20 @@ public class FieldConnection : MonoBehaviour
     Color dColor;
     Color hColor = Color.black;
 
-    private void Start()
+    void Start()
     {
         manager = transform.parent.parent.GetComponent<FieldManager>();
         lr = GetComponent<LineRenderer>();
         dColor = lr.startColor;
+    }
+
+    void Update()
+    {
+        Vector3 f = fields[0].transform.position;
+        Vector3 s = fields[1].transform.position;
+        f.z = s.z = transform.position.z;
+        lr.SetPosition(0, f);
+        lr.SetPosition(1, s);
     }
 
     public void Highlight(Color toColor, bool save)

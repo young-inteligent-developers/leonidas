@@ -15,23 +15,6 @@ public class InputManager : MonoBehaviour
     Vector2 startPos                    = new Vector2(-1, -1);
     FieldConnectionInfo currentInfo     = null;
 
-    public void ResetInput()
-    {
-        startPos = new Vector2(-1, -1);
-        inputPhase = 1;
-        idleTime = 0;
-        fieldManager.UnhighlightConnectedFields();
-    }
-
-    public void CancelLineHighlight(bool c)
-    {
-        if (currentInfo != null)
-        {
-            currentInfo.fieldConnection.Unhighlight(c);
-            currentInfo = null;
-        }
-    }
-
     void Update()
     {
 #if UNITY_EDITOR
@@ -46,7 +29,7 @@ public class InputManager : MonoBehaviour
 #endif
 
         DetectSwipe(pos);
-        DetectClick(pos);   
+        DetectClick(pos);
     }
 
     void DetectClick(Vector2 pos)
@@ -64,7 +47,7 @@ public class InputManager : MonoBehaviour
             DeselectField();
             return;
         }
-        
+
         Field f = hit.transform.GetComponent<Field>();
         if (fieldManager.selectedField && fieldManager.selectedField != f)
             fieldManager.selectedField.Deselect();
@@ -72,6 +55,23 @@ public class InputManager : MonoBehaviour
             f.Select();
         else
             f.Deselect();
+    }
+
+    public void ResetInput()
+    {
+        startPos = new Vector2(-1, -1);
+        inputPhase = 1;
+        idleTime = 0;
+        fieldManager.UnhighlightConnectedFields();
+    }
+
+    public void CancelLineHighlight(bool c)
+    {
+        if (currentInfo != null)
+        {
+            currentInfo.fieldConnection.Unhighlight(c);
+            currentInfo = null;
+        }
     }
 
     void DetectSwipe(Vector2 pos)
