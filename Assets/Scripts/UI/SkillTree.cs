@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SkillTree : MonoBehaviour
 {
-    public int points;
+    //public int pp;
     public GameObject SkillPoint;
 
     public GameObject attack;
@@ -31,7 +31,8 @@ public class SkillTree : MonoBehaviour
 
     void Start()
     {
-        SkillPoint.GetComponent<TextMeshProUGUI>().text = points.ToString();
+        SkillPoint.GetComponent<TextMeshProUGUI>().text = GameManager.instance.unlockPoints.ToString();
+        //SkillPoint.GetComponent<TextMeshProUGUI>().text = pp.ToString();
 
         RenderLines();
         RefreshLineColor(connections);
@@ -119,17 +120,17 @@ public class SkillTree : MonoBehaviour
         if (s.canUnlock == true && s.unlocked == false)
         {
             int c = s.cost;
-            if (points >= c) {
+            if (GameManager.instance.unlockPoints >= c) {
                 // Unlocked this skill
                 s.unlocked = true;
 
                 // Can unlocked next
                 if (s.nextSkill != s)
                     s.nextSkill.canUnlock = true;
-                
+
                 // Minus x points
-                points -= c;
-                SkillPoint.GetComponent<TextMeshProUGUI>().text = points.ToString();
+                GameManager.instance.unlockPoints -= c;
+                SkillPoint.GetComponent<TextMeshProUGUI>().text = GameManager.instance.unlockPoints.ToString();
 
                 // Color change
                 s.RefreshSkillColor();
