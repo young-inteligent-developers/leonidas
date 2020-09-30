@@ -117,8 +117,13 @@ public class FieldManager : MonoBehaviour
     public void IncreaseUnits(Field.Ownership os, int v)
     {
         foreach (Field f in fields)
+        {
             if (f.ownership == os)
+            {
                 f.SetStrength(f.strength + v, true);
+                f.FillTween(0.4f);
+            }
+        }
     }
 
     public void DecreaseUnits(Field.Ownership os, int v)

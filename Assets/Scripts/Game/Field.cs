@@ -22,6 +22,7 @@ public class Field : MonoBehaviour
     
     FieldManager manager;
     SpriteRenderer fill;
+    SpriteRenderer fillCopy;
     SpriteRenderer border;
     FieldUI fieldUI;
     Vector3 startPos;
@@ -33,6 +34,7 @@ public class Field : MonoBehaviour
 
         manager = transform.parent.GetComponent<FieldManager>();
         fill = transform.Find("Fill").GetComponent<SpriteRenderer>();
+        fillCopy = transform.Find("Fill copy").GetComponent<SpriteRenderer>();
         border = transform.Find("Border").GetComponent<SpriteRenderer>();
 
 
@@ -45,7 +47,7 @@ public class Field : MonoBehaviour
         // // // // // // // Field color assignment according its ownership // // // // // // //
 
         SetColors(ownership);
-        fill.color = colors[0];
+        fill.color = fillCopy.color = colors[0];
         border.color = colors[1];
 
 
@@ -182,8 +184,22 @@ public class Field : MonoBehaviour
         fieldUI.UpdateColor(colors[0]);
         LeanTween.color(fill.gameObject, colors[0], 0.2f)
             .setEase(LeanTweenType.easeInSine);
+        LeanTween.color(fillCopy.gameObject, colors[0], 0.2f)
+            .setEase(LeanTweenType.easeInSine);
         LeanTween.color(border.gameObject, colors[1], 0.2f)
             .setEase(LeanTweenType.easeInSine);
+    }
+
+    public void FillTween(float t)
+    {
+        Vector3 s = fillCopy.transform.localScale;
+        Color to = colors[0]; to.a = 0;
+        LeanTween.color(fillCopy.gameObject, to, t).setEaseOutQuad().setOnComplete(() => {
+            fillCopy.color = colors[0];
+        });
+        LeanTween.scale(fillCopy.gameObject, Vector3.one * 1.25f, t).setEaseOutQuad().setOnComplete(() => {
+            fillCopy.transform.localScale = s;
+        });
     }
 
     void SetColors(Ownership os)
@@ -198,9 +214,6 @@ public class Field : MonoBehaviour
         RectTransform rt = fieldUI.GetComponent<RectTransform>();    
         LeanTween.move(gameObject, pos, t)
             .setOnComplete(RandomMove);
-        /*LeanTween.value(fieldUI.gameObject, (Vector3 v) => {
-            rt.position = v;
-        }, rt.position, Camera.main.WorldToScreenPoint(pos), t);*/
     }
 
     Vector3 RandomPosition()
